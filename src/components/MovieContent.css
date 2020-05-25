@@ -1,0 +1,15 @@
+.container {
+  color: white;
+  box-sizing: border-box;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* border: crimson solid 2px;*/
+  width: 500px;
+}
+
+.p {
+  font-size: 20px;
+}
