@@ -24,14 +24,22 @@
 	display: flex;
 	flex-flow: column nowrap;
 	width: 10rem;
-	margin: 1rem 2rem;
+	margin: 0.5rem 2rem;
 }
 
 .movie_card_wrapper {
 	display: flex;
-	flex-flow: row wrap;
+	flex-flow: row nowrap;
 }
-
+/* 
 .main_content {
 	display: flex;
+	flex-direction: row;
+} */
+
+@media only screen and (max-width: 600px) {
+	.movie_card_container {
+		width: 20rem;
+		margin: 0.5rem 2rem;
+	}
 }
