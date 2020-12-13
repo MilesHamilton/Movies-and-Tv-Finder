@@ -12,6 +12,8 @@ import {
 	AutoComplete,
 	Carousel,
 	InputNumber,
+	Drawer,
+	Divider,
 } from "antd"
 import "./main.css"
 
@@ -22,7 +24,16 @@ const App = () => {
 	const [randomTv, setRandomTv] = useState("")
 	const [details, setDetails] = useState<any[]>([])
 	const [movSlide, setMovSlide] = useState<number>(0)
+	const [visible, setVisible] = useState(false)
+
 	console.log(tv)
+
+	const showDrawer = () => {
+		setVisible(true)
+	}
+	const onClose = () => {
+		setVisible(false)
+	}
 
 	const { Header, Footer, Sider, Content } = Layout
 
@@ -75,25 +86,24 @@ const App = () => {
 			movie &&
 			movie.map((mv) => {
 				return (
-					<div>
-						<Col className="movie_card_container">
-							<div
-								className="img"
-								onClick={() => {
-									setDetails([mv])
-								}}
-							>
-								<img
-									src={"https://image.tmdb.org/t/p/w200/" + mv.poster_path}
-									alt={mv.poster_path}
-								/>
-							</div>
+					<div className="card-container">
+						<div
+							className="img"
+							onClick={() => {
+								setDetails([mv])
+								showDrawer()
+							}}
+						>
+							<img
+								src={"https://image.tmdb.org/t/p/w200/" + mv.poster_path}
+								alt={mv.poster_path}
+							/>
+						</div>
 
-							<h1 className="title">{mv.title}</h1>
+						<h1 className="title">{mv.title}</h1>
 
-							<h2 className="vote_average">{mv.vote_average}/10</h2>
-							<p className="release_date">{mv.release_date}</p>
-						</Col>
+						<h2 className="vote_average">{mv.vote_average}/10</h2>
+						<p className="release_date">{mv.release_date}</p>
 					</div>
 				)
 			})
@@ -105,54 +115,36 @@ const App = () => {
 			tv &&
 			tv.map((tv) => {
 				return (
-					<div>
-						<Col className="movie_card_container">
-							<div
-								className="img"
-								onClick={() => {
-									setDetails([tv])
-								}}
-							>
-								<img
-									src={"https://image.tmdb.org/t/p/w200/" + tv.poster_path}
-									alt={tv.poster_path}
-								/>
-							</div>
+					<div className="card-container">
+						<div
+							className="imgtv"
+							onClick={() => {
+								setDetails([tv])
+								showDrawer()
+							}}
+						>
+							<img
+								src={"https://image.tmdb.org/t/p/w200/" + tv.poster_path}
+								alt={tv.poster_path}
+							/>
+						</div>
 
-							<h1 className="title">{tv.original_name}</h1>
+						<h1 className="title">{tv.original_name}</h1>
 
-							<h2 className="vote_average">{tv.vote_average}/10</h2>
-							<p className="release_date">{tv.first_air_date}</p>
-						</Col>
+						<h2 className="vote_average">{tv.vote_average}/10</h2>
+						<p className="release_date">{tv.first_air_date}</p>
+						{/* </Col> */}
 					</div>
 				)
 			})
 		)
 	}
 
-	// Shows Movie or TV detials
-	const showDetails = () => {
-		return (
-			<div>
-				<div className="img">
-					<img
-						src={"https://image.tmdb.org/t/p/w200/" + details[0].poster_path}
-						alt={details[0].poster_path}
-					/>
-				</div>
-				<h1 className="details_title">{details[0].title}</h1>
-
-				<h2 className="details_vote_average">{details[0].vote_average}/10</h2>
-				<p className="details_release_date">{details[0].release_date}</p>
-				<p className="overview"> {details[0].overview} </p>
-			</div>
-		)
-	}
-
 	const carousalSettings = {
 		slidesToShow: 8,
 		slidesToScroll: 4,
-		autoplay: true,
+		dots: false,
+		// autoplay: true,
 		pauseOnHover: true,
 		draggable: true,
 		autoplaySpeed: 5000,
@@ -161,8 +153,8 @@ const App = () => {
 			{
 				breakpoint: 1024,
 				settings: {
-					slidesToShow: 3,
-					slidesToScroll: 3,
+					slidesToShow: 5,
+					slidesToScroll: 5,
 					infinite: true,
 					dots: true,
 				},
@@ -188,29 +180,71 @@ const App = () => {
 	return (
 		<div className="App">
 			<Layout>
-				<Header>
-					<h1>Movie and Tv finder</h1>
-					<p>
-						Click on a tab to discover a new movie or tv show. The trending tabs
-						contain the most popular titles of both old and new film. The random
-						tabs contain over 10,000 tv and movie titles from all over the
-						world. Enjoy!
-					</p>
-				</Header>
-				<div className="main_content">
+				<Layout>
+					<Header>
+						<h1>Movie and Tv Finder</h1>
+					</Header>
 					<Content>
-						<Row>
+						<div className="search-header">
+							<h1>Welcome</h1>
+							<h2>
+								Find information on your favorite Movies and TV shows, including
+								their soundtracks
+							</h2>
+							<AutoComplete
+								// options={options}
+								// onSelect={onSelect}
+								// onSearch={onSearch}
+								placeholder="Search for Movie or TV show"
+							/>
+						</div>
+						<div className="movie-carousel">
+							<h1>Trending Movies</h1>
 							<Carousel {...carousalSettings}>{showMovies()}</Carousel>
-						</Row>
-						<Row>
+						</div>
+						<Divider plain />
+						<div className="tv-carousel">
+							<h1>Trending TV</h1>
 							<Carousel {...carousalSettings}>{showTv()}</Carousel>
-						</Row>
+						</div>
+						<div>
+							<Drawer
+								className="drawer_details"
+								placement="right"
+								closable={true}
+								onClose={onClose}
+								visible={visible}
+								maskClosable={true}
+							>
+								{details[0] == null ? null : (
+									<div>
+										<div className="img">
+											<img
+												src={
+													"https://image.tmdb.org/t/p/w200/" +
+													details[0].poster_path
+												}
+												alt={details[0].poster_path}
+											/>
+										</div>
+										<h1 className="details_title">{details[0].title}</h1>
+
+										<h2 className="details_vote_average">
+											{details[0].vote_average}/10
+										</h2>
+										<p className="details_release_date">
+											{details[0].release_date}
+										</p>
+										<p className="overview"> {details[0].overview} </p>
+									</div>
+								)}
+							</Drawer>
+						</div>
 					</Content>
+					<Footer></Footer>
+				</Layout>
 
-					<Sider>{details[0] == null ? null : showDetails()}</Sider>
-				</div>
-
-				<Footer></Footer>
+				{/* <Sider>{details[0] == null ? null : showDetails()}</Sider> */}
 			</Layout>
 		</div>
 	)
