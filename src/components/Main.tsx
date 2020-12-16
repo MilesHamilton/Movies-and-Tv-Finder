@@ -1,9 +1,9 @@
 import MovieContent from "./MovieContent"
 import React, { useEffect, useState, useRef } from "react"
 import TvContent from "./TvContent"
+import qs from "query-string"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
-
 import {
 	Layout,
 	Row,
@@ -16,6 +16,7 @@ import {
 	Divider,
 } from "antd"
 import "./main.css"
+import SpotifyWebApi from "spotify-web-api-js"
 
 const App = () => {
 	const [movie, setMovie] = useState<any[]>([])
@@ -23,9 +24,12 @@ const App = () => {
 	const [randomMovie, setRandomMovie] = useState("")
 	const [randomTv, setRandomTv] = useState("")
 	const [details, setDetails] = useState<any[]>([])
-	const [movSlide, setMovSlide] = useState<number>(0)
 	const [visible, setVisible] = useState(false)
+	const [accessToken, setAccessToken] = useState<any>("")
+	var SpotifyApi = new SpotifyWebApi()
+	SpotifyApi.setAccessToken(accessToken)
 
+	console.log(movie)
 	console.log(tv)
 
 	const showDrawer = () => {
@@ -38,6 +42,9 @@ const App = () => {
 	const { Header, Footer, Sider, Content } = Layout
 
 	useEffect(() => {
+		let parsed = qs.parse(window.location.search)
+		let token = parsed.access_token
+		setAccessToken(token)
 		handleMovieData()
 		handleTvData()
 		handleRandomMovie()
@@ -140,6 +147,18 @@ const App = () => {
 		)
 	}
 
+	const showAlbums = () => {
+		if (details) {
+			SpotifyApi.searchAlbums(`${details[0].title} Soundtrack`)
+				.then((data) => {
+					console.log("search", data)
+				})
+				.catch((err) => {
+					console.log(err)
+				})
+		}
+	}
+
 	const carousalSettings = {
 		slidesToShow: 8,
 		slidesToScroll: 4,
@@ -236,6 +255,7 @@ const App = () => {
 											{details[0].release_date}
 										</p>
 										<p className="overview"> {details[0].overview} </p>
+										{showAlbums()}
 									</div>
 								)}
 							</Drawer>
