@@ -149,7 +149,7 @@ const App = () => {
 
 	const showAlbums = () => {
 		if (details) {
-			SpotifyApi.searchAlbums(`${details[0].title} Soundtrack`)
+			SpotifyApi.getPlaylistTracks(`${details[0].title} Soundtrack`)
 				.then((data) => {
 					console.log("search", data)
 				})
