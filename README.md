@@ -1,14 +1,22 @@
 # Movie and Tv Finder
 
 Click [here](http://movie-tv-finder.surge.sh/) to go to the site!
+to ennable the Spotify API (currently only visible in the console) navigate to here and follow the insctuctions
+
+## Launching the site locally
+
+1. 'git clone' this repository
+2. run 'npm install' at the root folder
+3. run 'npm start'
+4. navigate to http://localhost:3000
 
 ## Description
 
-Movie and Tv Finder is a website that will get you a random movie or tv show either from all of [The Movie Database](https://www.themoviedb.org/?language=en-US) or just the current trending movies and tv.
+Movie and Tv Finder is made to be a clone of [The Movie Database](https://www.themoviedb.org/?language=en-US) but with the added core function of generating spotify playlist/album data whenever a movie or tv show is selected. Allowing the users to enjoy a preview of the soundtrack before seeing the movie in theaters!
 
-Some movie and tv titles might appear blank or nonexistant due to removal contnet within in the API. simply click on the tabs for another title!
+This project is currently in the development phase
 
-This website was build entirely in React.
+This website was build entirely in React. Using AntDesign system CSS Framework with Typescript
 
 ## Contributing
 
