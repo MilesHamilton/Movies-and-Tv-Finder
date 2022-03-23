@@ -1,33 +1,24 @@
-import MovieContent from "./MovieContent"
-import React, { useEffect, useState, useRef } from "react"
-import TvContent from "./TvContent"
-import qs from "query-string"
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-import {
-	Layout,
-	Row,
-	Col,
-	Input,
-	AutoComplete,
-	Carousel,
-	InputNumber,
-	Drawer,
-	Divider,
-} from "antd"
+import React, { useEffect, useState } from "react"
+import { Layout, Carousel, Drawer, Divider } from "antd"
 import "./main.css"
-import SpotifyWebApi from "spotify-web-api-js"
+import Spotify from "spotify-web-api-js"
 
-const App = () => {
+const SpotifyApi = new Spotify()
+interface Spotify {
+	playlistId: string
+}
+
+const App = (getParams: any) => {
 	const [movie, setMovie] = useState<any[]>([])
 	const [tv, setTv] = useState<any[]>([])
-	const [randomMovie, setRandomMovie] = useState("")
-	const [randomTv, setRandomTv] = useState("")
 	const [details, setDetails] = useState<any[]>([])
-	const [visible, setVisible] = useState(false)
-	const [accessToken, setAccessToken] = useState<any>("")
-	var SpotifyApi = new SpotifyWebApi()
-	SpotifyApi.setAccessToken(accessToken)
+	const [visible, setVisible] = useState<boolean>(false)
+	const [playlist, setPlaylist] = useState<any>([])
+	const [tracks, setTracks] = useState<any>([])
+
+	if (getParams) {
+		SpotifyApi.setAccessToken(getParams.getParams)
+	}
 
 	console.log(movie)
 	console.log(tv)
@@ -42,18 +33,20 @@ const App = () => {
 	const { Header, Footer, Sider, Content } = Layout
 
 	useEffect(() => {
-		let parsed = qs.parse(window.location.search)
-		let token = parsed.access_token
-		setAccessToken(token)
 		handleMovieData()
 		handleTvData()
-		handleRandomMovie()
-		handleRandomTv()
 	}, [])
 
+	useEffect(() => {
+		getPlaylist()
+		// if (playlist.length > 0) {
+		// 	getPlaylistTracks()
+		// }
+	}, [details])
+
+	console.log(tracks)
 	// API calls
 	const handleTvData = async () => {
-		let random = Math.floor(Math.random() * (2 - 1 + 1)) + 1
 		let tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&timezone=America%2FNew_York&vote_average.gte=0&include_null_first_air_dates=false&page=1`
 		const res = await fetch(tvUrl)
 		const data = await res.json()
@@ -61,34 +54,15 @@ const App = () => {
 		setTv(data.results)
 	}
 
-	const handleRandomTv = async () => {
-		let random = Math.floor(Math.random() * (500 - 1 + 1)) + 1
-		let tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&timezone=America%2FNew_York&vote_average.gte=0&include_null_first_air_dates=false&page=${random}`
-		const res = await fetch(tvUrl)
-		const data = await res.json()
-		// console.log(data)
-		setRandomTv(data)
-	}
-
 	const handleMovieData = async () => {
-		let random = Math.floor(Math.random() * (2 - 1 + 1)) + 1
-		let moviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&include_adult=false&include_video=false&vote_average.gte=0&page=${random}`
+		let moviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&include_adult=false&include_video=false&vote_average.gte=0&page=1}`
 		const res = await fetch(moviesUrl)
 		const data = await res.json()
-		// console.log(data)
 		setMovie(data.results)
 	}
 
-	const handleRandomMovie = async () => {
-		let random = Math.floor(Math.random() * (500 - 1 + 1)) + 1
-		let moviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&include_adult=false&include_video=false&vote_average.gte=0&page=${random}`
-		const res = await fetch(moviesUrl)
-		const data = await res.json()
-		// console.log(data)
-		setRandomMovie(data)
-	}
 	// Creates movie cards
-	const showMovies = () => {
+	const showMovies = (): JSX.Element[] => {
 		return (
 			movie &&
 			movie.map((mv) => {
@@ -117,7 +91,7 @@ const App = () => {
 		)
 	}
 	//  creates TV cards
-	const showTv = () => {
+	const showTv = (): JSX.Element[] => {
 		return (
 			tv &&
 			tv.map((tv) => {
@@ -128,6 +102,7 @@ const App = () => {
 							onClick={() => {
 								setDetails([tv])
 								showDrawer()
+								// getPlaylist()
 							}}
 						>
 							<img
@@ -140,12 +115,37 @@ const App = () => {
 
 						<h2 className="vote_average">{tv.vote_average}/10</h2>
 						<p className="release_date">{tv.first_air_date}</p>
-						{/* </Col> */}
 					</div>
 				)
 			})
 		)
 	}
+
+	// request pipe to get playlist id and individual tracks
+	const getPlaylist = () => {
+		if (details.length > 0) {
+			SpotifyApi.searchPlaylists(`${details[0].title} Soundtrack`)
+				.then((data) => {
+					setPlaylist(data)
+					const playlistID = playlist.items[0].id
+					SpotifyApi.getPlaylist(playlistID).then((data) => {
+						console.log(data)
+					})
+				})
+				.catch((err) => {
+					console.log(err)
+				})
+		}
+	}
+
+	// const getPlaylistTracks = () => {
+	// 	const playlistID = playlist.items[0].id
+	// 	SpotifyApi.getPlaylist(playlistID).then((data) => {
+	// 		console.log(data)
+	// 	})
+	// }
+
+	console.log(playlist)
 
 	const showAlbums = () => {
 		if (details) {
@@ -204,19 +204,11 @@ const App = () => {
 						<h1>Movie and Tv Finder</h1>
 					</Header>
 					<Content>
-						<div className="search-header">
-							<h1>Welcome</h1>
-							<h2>
-								Find information on your favorite Movies and TV shows, including
-								their soundtracks
-							</h2>
-							<AutoComplete
-								// options={options}
-								// onSelect={onSelect}
-								// onSearch={onSearch}
-								placeholder="Search for Movie or TV show"
-							/>
-						</div>
+						<h1>Welcome</h1>
+						<h2>
+							Find information on your favorite Movies and TV shows, including
+							their soundtracks
+						</h2>
 						<div className="movie-carousel">
 							<h1>Trending Movies</h1>
 							<Carousel {...carousalSettings}>{showMovies()}</Carousel>
@@ -255,7 +247,6 @@ const App = () => {
 											{details[0].release_date}
 										</p>
 										<p className="overview"> {details[0].overview} </p>
-										{showAlbums()}
 									</div>
 								)}
 							</Drawer>
@@ -263,8 +254,6 @@ const App = () => {
 					</Content>
 					<Footer></Footer>
 				</Layout>
-
-				{/* <Sider>{details[0] == null ? null : showDetails()}</Sider> */}
 			</Layout>
 		</div>
 	)
