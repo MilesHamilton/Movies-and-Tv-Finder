@@ -163,7 +163,7 @@ const App = (getParams: any) => {
 		slidesToShow: 8,
 		slidesToScroll: 4,
 		dots: false,
-		// autoplay: true,
+		autoplay: true,
 		pauseOnHover: true,
 		draggable: true,
 		autoplaySpeed: 5000,

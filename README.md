@@ -1,6 +1,6 @@
 # Movie and Tv Finder
 
-Click [here](http://movie-tv-finder.surge.sh/) to go to the site!
+Click [here](https://movieandtvfinder.vercel.app/) to go to the site!
 to ennable the Spotify API (currently only visible in the console) navigate to here and follow the insctuctions
 
 ## Launching the site locally
