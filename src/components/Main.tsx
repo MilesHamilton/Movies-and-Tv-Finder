@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Layout, Carousel, Drawer, Divider } from "antd"
-import "./main.css"
+// import "./main.css"
 import Spotify from "spotify-web-api-js"
 
 const SpotifyApi = new Spotify()
@@ -55,7 +55,7 @@ const App = (getParams: any) => {
 	}
 
 	const handleMovieData = async () => {
-		let moviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&include_adult=false&include_video=false&vote_average.gte=0&page=1}`
+		let moviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&include_adult=false&include_video=false&vote_average.gte=0&page=1`
 		const res = await fetch(moviesUrl)
 		const data = await res.json()
 		setMovie(data.results)
