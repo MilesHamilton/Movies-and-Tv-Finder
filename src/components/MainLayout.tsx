@@ -1,27 +1,24 @@
 import React, { useEffect, useState } from "react"
 import { Layout, Carousel, Drawer, Divider } from "antd"
-// import "./main.css"
+import "../Css/main.css"
 import Spotify from "spotify-web-api-js"
 
 const SpotifyApi = new Spotify()
-interface Spotify {
-	playlistId: string
-}
 
-const App = (getParams: any) => {
+const MainLayout = (token: any) => {
 	const [movie, setMovie] = useState<any[]>([])
 	const [tv, setTv] = useState<any[]>([])
 	const [details, setDetails] = useState<any[]>([])
 	const [visible, setVisible] = useState<boolean>(false)
-	const [playlist, setPlaylist] = useState<any>([])
+	const [playlist, setPlaylist] = useState<any>()
 	const [tracks, setTracks] = useState<any>([])
 
-	if (getParams) {
-		SpotifyApi.setAccessToken(getParams.getParams)
+	if (token) {
+		SpotifyApi.setAccessToken(token.token)
 	}
-
-	console.log(movie)
-	console.log(tv)
+	console.log(token.token)
+	// console.log(movie)
+	// console.log(tv)
 
 	const showDrawer = () => {
 		setVisible(true)
@@ -44,7 +41,7 @@ const App = (getParams: any) => {
 		// }
 	}, [details])
 
-	console.log(tracks)
+	// console.log(tracks)
 	// API calls
 	const handleTvData = async () => {
 		let tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&timezone=America%2FNew_York&vote_average.gte=0&include_null_first_air_dates=false&page=1`
@@ -124,10 +121,10 @@ const App = (getParams: any) => {
 	// request pipe to get playlist id and individual tracks
 	const getPlaylist = () => {
 		if (details.length > 0) {
-			SpotifyApi.searchPlaylists(`${details[0].title} Soundtrack`)
+			SpotifyApi.searchPlaylists(`${details[0].title} Movie`)
 				.then((data) => {
 					setPlaylist(data)
-					const playlistID = playlist.items[0].id
+					const playlistID = playlist.playlists.items[0].id
 					SpotifyApi.getPlaylist(playlistID).then((data) => {
 						console.log(data)
 					})
@@ -137,15 +134,13 @@ const App = (getParams: any) => {
 				})
 		}
 	}
-
+	console.log(playlist)
 	// const getPlaylistTracks = () => {
 	// 	const playlistID = playlist.items[0].id
 	// 	SpotifyApi.getPlaylist(playlistID).then((data) => {
 	// 		console.log(data)
 	// 	})
 	// }
-
-	console.log(playlist)
 
 	const showAlbums = () => {
 		if (details) {
@@ -259,4 +254,4 @@ const App = (getParams: any) => {
 	)
 }
 
-export default App
+export default MainLayout

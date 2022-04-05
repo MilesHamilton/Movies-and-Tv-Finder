@@ -3,27 +3,28 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@testing-library/jest-dom": "^4.2.4",
-		"@testing-library/react": "^9.5.0",
-		"@testing-library/user-event": "^7.2.1",
-		"antd": "^4.9.2",
-		"gulp": "^4.0.2",
+		"@testing-library/jest-dom": "^5.16.4",
+		"@testing-library/react": "^13.0.0",
+		"@testing-library/user-event": "^14.0.4",
+		"antd": "^4.19.5",
+		"gulp": "^3.9.1",
 		"gulp-sass": "^5.1.0",
-		"query-string": "^6.13.7",
-		"react": "^16.13.1",
-		"react-dom": "^16.13.1",
-		"react-scripts": "3.4.1",
-		"react-slick": "^0.27.13",
-		"serve": "^11.3.1",
+		"query-string": "^7.1.1",
+		"react": "^18.0.0",
+		"react-dom": "^18.0.0",
+		"react-scripts": "^5.0.0",
+		"react-slick": "^0.28.1",
+		"serve": "^13.0.2",
 		"slick-carousel": "^1.8.1",
-		"spotify-web-api-js": "^1.5.1",
-		"typescript": "^4.1.2"
+		"spotify-web-api-js": "^1.5.2",
+		"typescript": "^4.6.3"
 	},
 	"scripts": {
 		"start": "react-scripts --openssl-legacy-provider start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"sass": "sass src/Sass:src/Css --watch --no-source-map"
 	},
 	"eslintConfig": {
 		"extends": "react-app"
@@ -39,5 +40,8 @@
 			"last 1 firefox version",
 			"last 1 safari version"
 		]
+	},
+	"devDependencies": {
+		"sass": "^1.49.11"
 	}
 }
