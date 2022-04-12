@@ -11,12 +11,13 @@ const MainLayout = (token: any) => {
 	const [details, setDetails] = useState<any[]>([])
 	const [visible, setVisible] = useState<boolean>(false)
 	const [playlist, setPlaylist] = useState<any>()
-	const [tracks, setTracks] = useState<any>([])
+	const [playlistTracks, setPlaylistTracks] =
+		useState<SpotifyApi.PlaylistObjectFull>()
 
 	if (token) {
 		SpotifyApi.setAccessToken(token.token)
 	}
-	console.log(token.token)
+	// console.log(token.token)
 	// console.log(movie)
 	// console.log(tv)
 
@@ -36,6 +37,8 @@ const MainLayout = (token: any) => {
 
 	useEffect(() => {
 		getPlaylist()
+		// showSingleTrack() //wtf
+		// showTracks()
 		// if (playlist.length > 0) {
 		// 	getPlaylistTracks()
 		// }
@@ -99,7 +102,6 @@ const MainLayout = (token: any) => {
 							onClick={() => {
 								setDetails([tv])
 								showDrawer()
-								// getPlaylist()
 							}}
 						>
 							<img
@@ -121,12 +123,12 @@ const MainLayout = (token: any) => {
 	// request pipe to get playlist id and individual tracks
 	const getPlaylist = () => {
 		if (details.length > 0) {
-			SpotifyApi.searchPlaylists(`${details[0].title} Movie`)
+			SpotifyApi.searchPlaylists(`${details[0].title} Movie Soundtrack`)
 				.then((data) => {
 					setPlaylist(data)
 					const playlistID = playlist.playlists.items[0].id
 					SpotifyApi.getPlaylist(playlistID).then((data) => {
-						console.log(data)
+						setPlaylistTracks(data)
 					})
 				})
 				.catch((err) => {
@@ -134,7 +136,50 @@ const MainLayout = (token: any) => {
 				})
 		}
 	}
-	console.log(playlist)
+	console.log("Playlist:", playlist)
+	console.log("Playlist Tracks:", playlistTracks)
+
+	const showTracks = (playlistTracks?: any) => {
+		// JSON.parse(JSON.stringify(playlistTracks)).map((data: any) =>
+		// 	console.log(data.tracks.track[0])
+		// P
+		// if (playlistTracks !== undefined) {
+		// 	console.log(JSON.parse(JSON.stringify(playlistTracks)))
+		// }
+		// return (
+		// 	playlistTracks &&
+		// 	Object.keys(playlistTracks).map((keys: any, index: any) => {
+		// 		return <img>{index.images[0].url} </img>
+		// 	})
+		// )
+
+		Object.values(playlistTracks).map((data: any) => {
+			console.log(data)
+		})
+	}
+
+	if (playlistTracks !== undefined && playlistTracks !== null) {
+		// 	// console.log(JSON.parse(JSON.stringify(playlistTracks)))
+
+		// Object.keys(playlistTracks).map((data: any, index: any) => {
+		// 	console.log(data, index)
+		// })
+		Object.values(playlistTracks.tracks.items).map((data: any, index: any) =>
+			console.log(data, index, data.track.preview_url)
+		)
+
+		// showTracks()
+	}
+
+	// console.log(showTracks())
+	// const showSingleTrack = (playlistTracks?: SpotifyApi.PlaylistObjectFull) => {
+	// 	return (
+	// 		playlistTracks &&
+	// 		playlistTracks.map((keys: any, index: any) => {
+	// 			console.log(`${keys.images[0].url}: ${index.images[0]}`)
+	// 		})
+	// 	)
+	// }
 	// const getPlaylistTracks = () => {
 	// 	const playlistID = playlist.items[0].id
 	// 	SpotifyApi.getPlaylist(playlistID).then((data) => {
@@ -242,6 +287,8 @@ const MainLayout = (token: any) => {
 											{details[0].release_date}
 										</p>
 										<p className="overview"> {details[0].overview} </p>
+										{/* {showTracks()} */}
+										{/* {showSingleTrack()} */}
 									</div>
 								)}
 							</Drawer>
