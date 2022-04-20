@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react"
 import { loginUrl } from "./components/Spotify"
 import MainLayout from "./components/MainLayout"
 import MediaDetails from "./components/MediaDetails"
-import Login from "./components/Login"
 import { Layout } from "antd"
 import { ExtractToken } from "./components/Spotify"
-import { Routes, Route, Outlet, Link } from "react-router-dom"
+import { Routes, Route } from "react-router-dom"
 
 const { Header, Footer, Content } = Layout
 

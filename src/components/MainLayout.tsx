@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react"
 import { Carousel, Drawer, Divider } from "antd"
-import "../Css/main.css"
+import "../Sass/main_layout.scss"
 import { Routes, Route, Outlet, Link } from "react-router-dom"
 interface Props {
 	details: any[]
@@ -44,7 +44,6 @@ const MainLayout: React.FC<Props> = ({ details, upDetails, movie, tv }) => {
 		)
 	}
 
-	console.log(details)
 	//  creates TV cards
 	const showTv = (): JSX.Element[] => {
 		return (
