@@ -50,22 +50,28 @@ const MainLayout: React.FC<Props> = ({ details, upDetails, movie, tv }) => {
 			tv &&
 			tv.map((tv: any) => {
 				return (
-					<div className="card-container">
-						<div
-							className="imgtv"
-							onClick={() => {
-								upDetails([tv])
-							}}
-						>
-							<img
-								src={"https://image.tmdb.org/t/p/w200/" + tv.poster_path}
-								alt={tv.poster_path}
-							/>
+					<Link
+						key={tv.id}
+						to={`/movie/${tv.title}`}
+						onClick={() => upDetails([tv])}
+					>
+						<div className="card-container">
+							<div
+								className="img"
+								onClick={() => {
+									upDetails([tv])
+								}}
+							>
+								<img
+									src={"https://image.tmdb.org/t/p/w200/" + tv.poster_path}
+									alt={tv.poster_path}
+								/>
+							</div>
+							<h1 className="title">{tv.original_name}</h1>
+							<h2 className="vote_average">{tv.vote_average}/10</h2>
+							<p className="release_date">{tv.first_air_date}</p>
 						</div>
-						<h1 className="title">{tv.original_name}</h1>
-						<h2 className="vote_average">{tv.vote_average}/10</h2>
-						<p className="release_date">{tv.first_air_date}</p>
-					</div>
+					</Link>
 				)
 			})
 		)

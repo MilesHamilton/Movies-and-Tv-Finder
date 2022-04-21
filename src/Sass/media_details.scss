@@ -1,4 +1,102 @@
+body,
+html {
+	font-family: spotify-circular, spotify-circular-cyrillic,
+		spotify-circular-arabic, spotify-circular-hebrew, "Helvetica Neue",
+		Helvetica, Arial, "Hiragino Kaku Gothic Pro", Meiryo, "MS Gothic",
+		sans-serif;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 24px;
+	color: rgb(255, 255, 255);
+	text-transform: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: rgb(255, 255, 255);
+}
+
+.ant-layout {
+	background-color: rgb(18, 18, 18);
+	display: flex;
+	height: 100%;
+	margin: 0px;
+	-webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+}
 .album_player {
-	width: 10rem;
-	background-color: blue;
+	margin-top: -6rem;
+	margin-bottom: 1rem;
+	width: 100%;
+	height: 4rem;
+}
+
+.track_wrapper {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.video_wrapper {
+	width: 100%;
+	height: 4rem;
+	margin-bottom: 0.7rem;
+}
+.video_wrapper:hover {
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+.info_wrapper {
+	display: flex;
+	flex-direction: row;
+	align-items: self-end;
+
+	.artists_wrapper {
+		flex-direction: column;
+	}
+
+	h1 {
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 24px;
+		color: rgb(255, 255, 255);
+	}
+
+	h2 {
+		color: rgb(179, 179, 179);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: 13px;
+		font-weight: 400;
+		line-height: 16px;
+	}
+
+	p {
+		font-size: 16px;
+		margin-right: 16px;
+		margin-top: 5px;
+		font-weight: 700;
+		color: rgb(179, 179, 179);
+		min-width: 40px;
+		line-height: 43px;
+		font-family: spotify-circular, spotify-circular-cyrillic,
+			spotify-circular-arabic, spotify-circular-hebrew, "Helvetica Neue",
+			Helvetica, Arial, "Hiragino Kaku Gothic Pro", Meiryo, "MS Gothic",
+			sans-serif;
+	}
+
+	img {
+		margin-right: 16px;
+		background-color: #282828;
+		flex-shrink: 0;
+		object-position: center center;
+	}
+}
+
+.artists_wrapper {
+	display: flex;
+	flex-direction: column;
 }

@@ -3,7 +3,7 @@ import Spotify from "spotify-web-api-js"
 import "../Sass/media_details.scss"
 interface Props {
 	details: any[]
-	token: any
+	token: string
 }
 
 const MediaDetails: React.FC<Props> = ({ token, details }) => {
@@ -29,16 +29,17 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 		SpotifyApi.setAccessToken(token)
 	}
 
-	// console.log(details)
-	// console.log(token)
-
 	// render api results
-
+	console.log(details)
 	//Album pipe ---------------------------------------------------
 	const getAlbum = () => {
 		if (details.length > 0) {
 			SpotifyApi.searchAlbums(
-				`${details[0].title} Original Motion Picture Soundtrack`
+				`${details[0].title} ${
+					details[0].first_air_date
+						? `Series`
+						: `Original Motion Picture Soundtrack`
+				}`
 			)
 				.then((data) => {
 					setAlbum(data)
@@ -56,22 +57,44 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 		}
 	}
 
+	const getAlbumArtist = (albumTracks?: SpotifyApi.AlbumObjectFull) => {
+		return albumTracks?.artists.map((artists) => {
+			return <h2>{artists.name}</h2>
+		})
+	}
+
 	const showAlbumTracks = (albumTracks?: SpotifyApi.AlbumObjectFull) => {
-		if (albumTracks !== undefined && albumTracks !== null) {
+		if (albumTracks !== undefined) {
 			return (
 				albumTracks &&
-				Object.values(albumTracks).map((data, index: number) => {
-					return (
-						<video
-							key={index}
-							poster={data.images[0].url} //wtf
-							onMouseOver={handleMouseOver}
-							onMouseOut={handleMouseOut}
-							// src={data.track.items.} //double wtf
-							className="album_player"
-						></video>
-					)
-				})
+				Object.values(albumTracks.tracks.items).map(
+					(data: any, index: number) => {
+						return (
+							<div className="video_wrapper">
+								<div className="info_wrapper">
+									<p>{data.track_number}</p>
+									<img
+										src={albumTracks.images[2].url}
+										alt="album track art"
+									></img>
+									<div className="artist_wrapper">
+										<h1>{data.name}</h1>
+										{getAlbumArtist(albumTracks)}
+									</div>
+								</div>
+
+								<video
+									key={index}
+									// poster={albumTracks.images[1].url}
+									onMouseOver={handleMouseOver}
+									onMouseOut={handleMouseOut}
+									src={data.preview_url}
+									className="album_player"
+								></video>
+							</div>
+						)
+					}
+				)
 			)
 		}
 	}
@@ -100,7 +123,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	const showPlaylistTracks = (
 		playlistTracks?: SpotifyApi.PlaylistObjectFull
 	) => {
-		if (playlistTracks !== undefined && playlistTracks !== null) {
+		if (playlistTracks !== undefined) {
 			return (
 				playlistTracks &&
 				Object.values(playlistTracks.tracks.items).map(
@@ -108,7 +131,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 						return (
 							<video
 								key={index}
-								poster={data.track.album.images[2].url}
+								// poster={data.track.album.images[0].url}
 								onMouseOver={handleMouseOver}
 								onMouseOut={handleMouseOut}
 								src={data.track.preview_url}
@@ -118,15 +141,6 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 					}
 				)
 			)
-		}
-	}
-
-	// Render Playlists if Albums are empty
-	const albumOrPlaylist = () => {
-		if (albumTracks === undefined || albumTracks.tracks.items === []) {
-			showPlaylistTracks(playlistTracks)
-		} else {
-			showAlbumTracks(albumTracks)
 		}
 	}
 	//-------------------------------------------------------------------
@@ -142,7 +156,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 		<>
 			{details[0] == null ? null : (
 				<div className="media_details">
-					<div className="img">
+					<div className="media_img">
 						<img
 							src={"https://image.tmdb.org/t/p/w200/" + details[0].poster_path}
 							alt={details[0].poster_path}
@@ -152,10 +166,11 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 					<h2 className="details_vote_average">{details[0].vote_average}/10</h2>
 					<p className="details_release_date">{details[0].release_date}</p>
 					<p className="overview"> {details[0].overview} </p>
-					{albumOrPlaylist()}
-
-					{/* {showPlaylistTracks(playlistTracks)} */}
-					{/* {getTrackDetails(playlistTracks)} */}
+					<div className="track_wrapper">
+						{albumTracks === undefined
+							? showPlaylistTracks(playlistTracks)
+							: showAlbumTracks(albumTracks)}
+					</div>
 				</div>
 			)}
 		</>
