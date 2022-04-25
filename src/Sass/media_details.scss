@@ -27,7 +27,24 @@ h6 {
 	margin: 0px;
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
 }
+
+.media_details {
+	display: flex;
+	flex-direction: column;
+
+	.media_info_wrapper {
+		display: flex;
+		flex-direction: row;
+	}
+}
 .album_player {
+	margin-top: -6rem;
+	margin-bottom: 1rem;
+	width: 100%;
+	height: 4rem;
+}
+
+.playlist_player {
 	margin-top: -6rem;
 	margin-bottom: 1rem;
 	width: 100%;
@@ -53,8 +70,18 @@ h6 {
 	flex-direction: row;
 	align-items: self-end;
 
-	.artists_wrapper {
+	.artist_wrapper {
+		display: flex;
 		flex-direction: column;
+
+		.artist_info {
+			display: flex;
+			flex-wrap: wrap;
+
+			.artist_name {
+				margin-right: 0.5rem;
+			}
+		}
 	}
 
 	h1 {
@@ -72,6 +99,7 @@ h6 {
 		font-size: 13px;
 		font-weight: 400;
 		line-height: 16px;
+		margin-right: 0.5rem;
 	}
 
 	p {
@@ -94,9 +122,4 @@ h6 {
 		flex-shrink: 0;
 		object-position: center center;
 	}
-}
-
-.artists_wrapper {
-	display: flex;
-	flex-direction: column;
 }

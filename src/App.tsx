@@ -13,19 +13,21 @@ const App = () => {
 	const [tv, setTv] = useState<any[]>([])
 	const [details, setDetails] = useState<any[]>([])
 	const [token, setToken] = useState<any>(null)
-
-	console.log(movie)
-	console.log(token)
+	const [refresh, setRefresh] = useState<any>(null)
 
 	useEffect(() => {
 		const hash = ExtractToken()
 		const token = hash.access_token
+		const refresh = hash.refresh_token
+		console.log(hash)
 		upDetails(details)
 		setToken(token)
+		setRefresh(refresh)
 		handleMovieData()
 		handleTvData()
 	}, [])
 	console.log(token)
+	console.log(refresh)
 	const upDetails = (details: any[]) => {
 		setDetails(details)
 	}
@@ -44,8 +46,8 @@ const App = () => {
 		const data = await res.json()
 		setMovie(data.results)
 	}
-
-	return (
+	//api.themoviedb.org/3/movie/now_playing?api_key=<<api_key>>&language=en-US&page=1
+	https: return (
 		<div className="App">
 			{token ? (
 				<h1>Successfully logged it</h1>
@@ -71,6 +73,10 @@ const App = () => {
 						/>
 						<Route
 							path="/movie/:movie"
+							element={<MediaDetails token={token} details={details} />}
+						/>
+						<Route
+							path="/tv/:tv"
 							element={<MediaDetails token={token} details={details} />}
 						/>
 					</Routes>

@@ -52,7 +52,7 @@ const MainLayout: React.FC<Props> = ({ details, upDetails, movie, tv }) => {
 				return (
 					<Link
 						key={tv.id}
-						to={`/movie/${tv.title}`}
+						to={`/tv/${tv.original_name}`}
 						onClick={() => upDetails([tv])}
 					>
 						<div className="card-container">
