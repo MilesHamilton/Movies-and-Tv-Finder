@@ -19,6 +19,8 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	const [artistTopTracks, setArtistTopTracks] =
 		useState<SpotifyApi.ArtistsTopTracksResponse>()
 	const [relatedArtists, setRelatedArtists] = useState<any>()
+	// const [relatedArtistArr, setRelatedArtistArr] = useState<any>()
+	const [relatedArtistTracks, setRelatedArtistTracks] = useState<any>()
 
 	const SpotifyApi = new Spotify()
 	useEffect(() => {
@@ -39,6 +41,8 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	console.log("Artist Recommendations:", artistRecommendations)
 	console.log("Artist Top Tracks", artistTopTracks)
 	console.log("Related Artists", relatedArtists)
+	// console.log("Related Artist Track", relatedArtistArr)
+	console.log("Related Artist Tracks", relatedArtistTracks)
 	// console.log(details[0])
 	// console.log(details[0].title)
 
@@ -187,34 +191,66 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	//Artist pipe ------------------------------
 
 	const getArtist = (artist: string) => {
-		SpotifyApi.getArtist(artist).then((data) => {
-			setArtistInfo(data)
-			return data
-		})
-
-		SpotifyApi.getRecommendations({
-			seed_artists: artist,
-			seed_tracks: artist,
-		}).then((data) => {
-			setArtistRecommendations(data)
-		})
-
-		SpotifyApi.getArtistTopTracks(artist, "US").then((data) => {
-			setArtistTopTracks(data)
-		})
-		const headers = {
-			"Accept": "application/json",
-			"Content-Type": "application/json",
-			"Authorization": `Bearer ${token}`,
-		}
-		fetch(`https://api.spotify.com/v1/artists/${artist}/related-artists`, {
-			headers,
-		})
-			.then((res) => res.json())
+		SpotifyApi.getArtist(artist)
 			.then((data) => {
-				setRelatedArtists(data)
+				setArtistInfo(data)
 			})
+			.then(() => {
+				SpotifyApi.getRecommendations({
+					seed_artists: artist,
+					seed_tracks: artist,
+				}).then((data) => {
+					setArtistRecommendations(data)
+				})
+
+				SpotifyApi.getArtistTopTracks(artist, "US").then((data) => {
+					setArtistTopTracks(data)
+				})
+				const headers = {
+					"Accept": "application/json",
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${token}`,
+				}
+				fetch(`https://api.spotify.com/v1/artists/${artist}/related-artists`, {
+					headers,
+				})
+					.then((res) => res.json())
+					.then((data) => {
+						setRelatedArtists(data)
+					})
+			})
+		let newRelatedArtistsArr: any[] = []
+		let newRelatedArtistsTracksArr: any[] = []
+		relatedArtists &&
+			Object.values(relatedArtists).map((data: any) => {
+				data.map((data: any, index: number) => {
+					newRelatedArtistsArr.push(data)
+				})
+				newRelatedArtistsArr.map((data: any) => {
+					SpotifyApi.getArtistTopTracks(data.id, "US").then((data) => {
+						newRelatedArtistsTracksArr.push(data)
+						setRelatedArtistTracks(newRelatedArtistsTracksArr)
+					})
+				})
+			})
+
+		// relatedArtistArr &&
+		// 	relatedArtistArr.map((data: any) => {
+		// 		console.log(data)
+		// 		SpotifyApi.getArtistTopTracks(data.id, "US").then((data) => {
+		// 			setRelatedArtistTracks(data)
+		// 		})
+		// 	})
 	}
+
+	// let arr: any[] = []
+	// relatedArtists &&
+	// 	Object.values(relatedArtists).map((data: any) => {
+	// 		data.map((data: any, index: number) => {
+	// 			arr.push(data)
+	// 			console.log(arr)
+	// 		})
+	// 	})
 
 	const spotifyArtistInfo = () => {
 		return (
