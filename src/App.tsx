@@ -81,7 +81,6 @@ const App = () => {
 						/>
 					</Routes>
 				</Content>
-				<Footer></Footer>
 			</Layout>
 		</div>
 	)

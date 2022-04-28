@@ -19,8 +19,13 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	const [artistTopTracks, setArtistTopTracks] =
 		useState<SpotifyApi.ArtistsTopTracksResponse>()
 	const [relatedArtists, setRelatedArtists] = useState<any>()
-	const [selectedTrack, setSelectedTrack] = useState<any>()
 	const [relatedArtistTracks, setRelatedArtistTracks] = useState<any>()
+	const [selectedTrack, setSelectedTrack] = useState<any>({
+		artistImg: null,
+		artistName: null,
+		trackName: null,
+		track: null,
+	})
 
 	const SpotifyApi = new Spotify()
 	useEffect(() => {
@@ -106,13 +111,17 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 								<video
 									key={index}
 									// poster={albumTracks.images[1].url}
-									onClick={() => {
-										getArtist()
-									}}
+									onClick={() => {}}
 									onMouseOver={(e) => {
 										handleMouseOver(e)
 										setArtist(data.artists[0].id)
-										setSelectedTrack(data)
+										getArtist()
+										setSelectedTrack({
+											...selectedTrack,
+											artistImg: artistInfo?.images[2].url,
+											artistName: artistInfo?.name,
+											trackName: data.name,
+										})
 									}}
 									onMouseOut={handleMouseOut}
 									src={data.preview_url}
@@ -173,13 +182,16 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 								</div>
 								<video
 									key={index}
-									onClick={() => {
-										getArtist()
-									}}
+									onClick={() => {}}
 									onMouseOver={(e) => {
 										handleMouseOver(e)
 										setArtist(data.track.artists[0].id)
-										setSelectedTrack(data)
+										getArtist()
+										setSelectedTrack({
+											artistImg: artistInfo?.images[1].url,
+											artistName: artistInfo?.name,
+											trackName: data.track.name,
+										})
 									}}
 									onMouseOut={handleMouseOut}
 									src={data.track.preview_url}
@@ -193,7 +205,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 		}
 	}
 
-	//Artist pipe ------------------------------
+	//Artist pipe --------------------------------------------------------
 
 	const getArtist = () => {
 		SpotifyApi.getArtist(artist)
@@ -242,15 +254,13 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 			})
 	}
 
-	const getSingleTrackInfo = () => {}
-
-	const spotifyArtistsInfo = () => {
-		if (artistInfo !== undefined) {
+	const getSelectedTrackInfo = () => {
+		if (selectedTrack !== undefined) {
 			return (
 				<div className="spotify_artists_info">
-					<img src={artistInfo.images[1].url}></img>
-					<h1>{selectedTrack.name}</h1>
-					<h2>{selectedTrack.artists[0].name}</h2>
+					<img src={selectedTrack.artistImg}></img>
+					<h1>{selectedTrack.artistName}</h1>
+					<h2>{selectedTrack.trackName}</h2>
 				</div>
 			)
 		}
@@ -260,20 +270,21 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 		if (relatedArtists !== undefined) {
 			return Object.values(relatedArtists).map((data: any) => {
 				return data.map((data: any) => {
-					return <img src={data.images[2].url} className="artist_player"></img>
+					return (
+						<img
+							onMouseOver={() =>
+								setSelectedTrack({
+									artistImg: data.images[1].url,
+									artistName: data.name,
+								})
+							}
+							src={data.images[2].url}
+							className="artist_player"
+						></img>
+					)
 				})
 			})
 		}
-	}
-
-	if (relatedArtists !== undefined) {
-		console.log(
-			Object.values(relatedArtists).map((data: any) => {
-				data.map((data: any) => {
-					console.log(data)
-				})
-			})
-		)
 	}
 
 	const spotifyRelatedArtistsTracks = () => {
@@ -287,10 +298,15 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 						// 	getArtist()
 						// }}
 						onMouseOver={(e) => {
+							setSelectedTrack({
+								...selectedTrack,
+								track: data.tracks[0].preview_url,
+								trackName: data.tracks[0].name,
+							})
 							handleMouseOver(e)
 						}}
 						onMouseOut={handleMouseOut}
-						src={data[0].tracks[0].preview_url}
+						src={selectedTrack.track}
 						className="related_artists_player"
 					></video>
 				)
@@ -303,7 +319,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 			return (
 				artistTopTracks &&
 				Object.values(artistTopTracks).map((data) => {
-					data.map((data: any, index: number) => {
+					return data.map((data: any, index: number) => {
 						return (
 							<video
 								key={index}
@@ -312,7 +328,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 									handleMouseOver(e)
 								}}
 								onMouseOut={handleMouseOut}
-								src={data[0].tracks[0].preview_url}
+								src={data.preview_url}
 								className="related_artists_player"
 							></video>
 						)
@@ -367,9 +383,10 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 						</div>
 					</div>
 					<div className="media_artists_wrapper">
-						{spotifyArtistsInfo()}
+						{getSelectedTrackInfo()}
 						{spotifyRelatedArtistsInfo()}
-						{/* {spotifyArtistTopTracks()} */}
+						{spotifyRelatedArtistsTracks()}
+						{spotifyArtistTopTracks()}
 					</div>
 				</div>
 			)}
