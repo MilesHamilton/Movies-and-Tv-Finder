@@ -26,6 +26,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 		trackName: null,
 		track: null,
 	})
+	const [hover, setHover] = useState<boolean>(false)
 
 	const SpotifyApi = new Spotify()
 	useEffect(() => {
@@ -35,7 +36,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 
 	useEffect(() => {
 		getArtist()
-	}, [artist])
+	}, [artist, hover])
 
 	console.log("Playlist:", playlist)
 	console.log("Playlist Tracks:", playlistTracks)
@@ -91,36 +92,28 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 				Object.values(albumTracks.tracks.items).map(
 					(data: any, index: number) => {
 						return (
-							<div className="video_wrapper">
-								<div className="info_wrapper">
-									<p>{data.track_number}</p>
+							<div className="spotify_tracks">
+								<div className="track_wrapper">
 									<img
-										src={albumTracks.images[2].url}
+										src={albumTracks.images[1].url}
 										alt="album track art"
 									></img>
 									<div className="artist_wrapper">
 										<h1>{data.name}</h1>
-										<div className="artist_info">
-											{data.artists.map((artist: any) => (
-												<h2> {artist.name} </h2>
-											))}
-										</div>
 									</div>
 								</div>
 
 								<video
 									key={index}
-									// poster={albumTracks.images[1].url}
 									onClick={() => {}}
 									onMouseOver={(e) => {
 										handleMouseOver(e)
 										setArtist(data.artists[0].id)
 										getArtist()
 										setSelectedTrack({
-											...selectedTrack,
-											artistImg: artistInfo?.images[2].url,
-											artistName: artistInfo?.name,
+											artistName: data.artists[0].name,
 											trackName: data.name,
+											...setSelectedTrack,
 										})
 									}}
 									onMouseOut={handleMouseOut}
@@ -133,6 +126,15 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 				)
 			)
 		}
+	}
+
+	const handleMouseOver = (e: React.MouseEvent<HTMLVideoElement>) => {
+		e.currentTarget.play()
+		setHover(true)
+	}
+	const handleMouseOut = (e: React.MouseEvent<HTMLVideoElement>) => {
+		e.currentTarget.pause()
+		setHover(false)
 	}
 
 	// Playlist pipe ----------------------------------------------
@@ -164,34 +166,28 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 				Object.values(playlistTracks.tracks.items).map(
 					(data: any, index: number) => {
 						return (
-							<div className="video_wrapper">
-								<div className="info_wrapper">
-									<p>{index}</p>
+							<div className="spotify_tracks">
+								<div className="track_wrapper">
 									<img
-										src={data.track.album.images[2].url}
+										src={data.track.album.images[1].url}
 										alt="soundtrack art"
 									></img>
 									<div className="artist_wrapper">
 										<h1>{data.track.name}</h1>
-										<div className="artist_info">
-											{data.track.artists.map((artist: any) => (
-												<h2> {artist.name} </h2>
-											))}
-										</div>
 									</div>
 								</div>
 								<video
 									key={index}
 									onClick={() => {}}
 									onMouseOver={(e) => {
-										handleMouseOver(e)
 										setArtist(data.track.artists[0].id)
-										getArtist()
 										setSelectedTrack({
-											artistImg: artistInfo?.images[1].url,
-											artistName: artistInfo?.name,
+											artistName: data.track.artists[0].name,
 											trackName: data.track.name,
+											...setSelectedTrack,
 										})
+										getArtist()
+										handleMouseOver(e)
 									}}
 									onMouseOut={handleMouseOut}
 									src={data.track.preview_url}
@@ -211,6 +207,10 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 		SpotifyApi.getArtist(artist)
 			.then((data) => {
 				setArtistInfo(data)
+				setSelectedTrack({
+					artistImg: data.images[1].url,
+					...selectedTrack,
+				})
 			})
 			.then(() => {
 				SpotifyApi.getRecommendations({
@@ -240,6 +240,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 			.then(() => {
 				let newRelatedArtistsArr: any[] = []
 				let newRelatedArtistsTracksArr: any[] = []
+				let newCombinedArray: any[] = []
 				Object.values(relatedArtists).map((data: any) => {
 					data.map((data: any) => {
 						newRelatedArtistsArr.push(data)
@@ -255,15 +256,13 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	}
 
 	const getSelectedTrackInfo = () => {
-		if (selectedTrack !== undefined) {
-			return (
-				<div className="spotify_artists_info">
-					<img src={selectedTrack.artistImg}></img>
-					<h1>{selectedTrack.artistName}</h1>
-					<h2>{selectedTrack.trackName}</h2>
-				</div>
-			)
-		}
+		return (
+			<div className="spotify_selectedtrack">
+				<img src={selectedTrack.artistImg}></img>
+				<h1>{selectedTrack.artistName}</h1>
+				<h2>{selectedTrack.trackName}</h2>
+			</div>
+		)
 	}
 
 	const spotifyRelatedArtistsInfo = () => {
@@ -276,10 +275,11 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 								setSelectedTrack({
 									artistImg: data.images[1].url,
 									artistName: data.name,
+									...setSelectedTrack,
 								})
 							}
 							src={data.images[2].url}
-							className="artist_player"
+							className="related_artist_info"
 						></img>
 					)
 				})
@@ -297,11 +297,12 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 						// 	setArtist(data[0].tracks[0].id)
 						// 	getArtist()
 						// }}
+						// poster={data.artistImg}
 						onMouseOver={(e) => {
 							setSelectedTrack({
-								...selectedTrack,
 								track: data.tracks[0].preview_url,
 								trackName: data.tracks[0].name,
+								...selectedTrack,
 							})
 							handleMouseOver(e)
 						}}
@@ -329,7 +330,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 								}}
 								onMouseOut={handleMouseOut}
 								src={data.preview_url}
-								className="related_artists_player"
+								className="artists_top_tracks_player"
 							></video>
 						)
 					})
@@ -337,56 +338,60 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 			)
 		}
 	}
-	// console.log(
-	// 	artistTopTracks &&
-	// 		Object.values(artistTopTracks).map((data) => {
-	// 			data.map((data: any) => {
-	// 				console.log(data)
-	// 			})
-	// 		})
-	// )
-	const handleMouseOver = (e: React.MouseEvent<HTMLVideoElement>) => {
-		e.currentTarget.play()
-	}
-	const handleMouseOut = (e: React.MouseEvent<HTMLVideoElement>) => {
-		e.currentTarget.pause()
-	}
 
 	return (
 		<>
 			{details[0] == null ? null : (
-				<div className="media_details_wrapper">
-					<div className="media_details">
-						<div className="media_info_wrapper">
-							<div className="media_img">
-								<img
-									src={
-										"https://image.tmdb.org/t/p/w200/" + details[0].poster_path
-									}
-								/>
-							</div>
-							<div className="media_info">
-								<h1 className="details_title">{details[0].title}</h1>
-								<h2 className="details_vote_average">
-									{details[0].vote_average}/10
-								</h2>
-								<p className="details_release_date">
-									Release Date: {details[0].release_date}
-								</p>
-								<p className="overview">Overview: {details[0].overview} </p>
-							</div>
+				<div className="main_media_details_wrapper">
+					<div className="main_TMBD_info_wrapper">
+						<div className="main_TMBD_img">
+							<img
+								src={
+									"https://image.tmdb.org/t/p/w200/" + details[0].poster_path
+								}
+							/>
 						</div>
-						<div className="track_wrapper">
+						<div className="main_TMDB_info_details">
+							<h1 className="details_title">{details[0].title}</h1>
+							<h2 className="details_vote_average">
+								{details[0].vote_average}/10
+							</h2>
+							<p className="details_release_date">
+								Release Date: {details[0].release_date}
+							</p>
+							<p className="details_overview">
+								<b>Overview:</b>
+								<br></br> {details[0].overview}
+							</p>
+						</div>
+					</div>
+					<div className="spotify_wrapper">
+						<div className="main_spotify_track_wrapper">
 							{albumTracks === undefined
 								? showPlaylistTracks(playlistTracks)
 								: showAlbumTracks(albumTracks)}
 						</div>
-					</div>
-					<div className="media_artists_wrapper">
-						{getSelectedTrackInfo()}
-						{spotifyRelatedArtistsInfo()}
-						{spotifyRelatedArtistsTracks()}
-						{spotifyArtistTopTracks()}
+						<div className="sidebar_spotify_details_wrapper">
+							<div className="sidebar_spotify_details">
+								<div className="details_selectedtrack">
+									{getSelectedTrackInfo()}
+								</div>
+
+								<div className="details_related_artist_title_wrapper">
+									<p>RELATED ARTISTS</p>
+								</div>
+								<div className="details_related_artists">
+									{spotifyRelatedArtistsInfo()}
+								</div>
+								<div className="details_related_tracks">
+									{spotifyRelatedArtistsTracks()}
+								</div>
+							</div>
+
+							<div className="details_artist_top_tracks">
+								{spotifyArtistTopTracks()}
+							</div>
+						</div>
 					</div>
 				</div>
 			)}
