@@ -9,6 +9,7 @@ html {
 	line-height: 24px;
 	color: rgb(255, 255, 255);
 	text-transform: none;
+	overflow-x: hidden;
 }
 
 h1,
@@ -34,7 +35,7 @@ h6 {
 	display: flex;
 	flex-direction: column;
 
-	.main_TMDB_info_wrapper {
+	.main_TMBD_info_wrapper {
 		display: flex;
 		flex-direction: row;
 
@@ -50,7 +51,7 @@ h6 {
 		height: 4rem;
 		margin: 0rem 0rem;
 		margin-top: 0rem;
-		height: 7rem;
+		height: 100%;
 		margin-left: -123%;
 	}
 
@@ -59,7 +60,7 @@ h6 {
 		height: 4rem;
 		margin: 0rem 0rem;
 		margin-top: 0rem;
-		height: 7rem;
+		height: 100%;
 		margin-left: -123%;
 	}
 
@@ -72,8 +73,8 @@ h6 {
 		display: flex;
 		height: 100vh;
 		.main_spotify_track_wrapper {
-			width: 63%;
-			height: 66px;
+			width: 100%;
+			height: 66%;
 			margin-bottom: 1rem;
 			display: flex;
 			flex-wrap: wrap;
@@ -142,6 +143,22 @@ h6 {
 				}
 			}
 		}
+
+		.main_spotify_toggle {
+		}
+
+		.disabled {
+			pointer-events: none;
+		}
+
+		.active {
+			background: #3f3d58;
+			z-index: 1009;
+			opacity: 0.5;
+			-webkit-animation: fadein 0.3s;
+			animation: fadein 0.3s;
+			// height: fit-content;
+		}
 		.spotify_tracks:hover {
 			transform: translate3d(5px, 0px, 20px);
 			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
@@ -149,17 +166,16 @@ h6 {
 	}
 
 	.sidebar_spotify_details_wrapper {
-		width: 40%;
+		width: 31%;
+		min-width: 31%;
 		.sidebar_spotify_details {
 			display: flex;
 			flex-direction: row;
 		}
 		.details_related_artist_title_wrapper {
-			display: flex;
-			margin-right: -12.7rem;
-			width: 9.5rem;
-			margin-left: 3rem;
+			margin-left: 2rem;
 			margin-top: -1.5rem;
+			margin-right: -40%;
 			p {
 				margin: 1rem;
 				font-weight: 100;
@@ -172,14 +188,14 @@ h6 {
 		.details_related_artists {
 			display: grid;
 			grid-template-columns: 50% 50%;
-			margin-left: 12%;
+			margin-left: 8%;
 			margin-top: 1.5rem;
 
 			.related_artist_info {
 				border-radius: 50%;
 				height: 4rem;
 				width: 4rem;
-
+				margin: 0.2rem;
 				z-index: 1;
 			}
 		}
@@ -187,12 +203,13 @@ h6 {
 		.details_related_tracks {
 			display: grid;
 			grid-template-columns: 50% 50%;
-			margin-left: -22%;
+			margin-left: -31%;
 			margin-top: 1.5rem;
+			cursor: pointer;
 			.related_artists_player {
 				height: 4rem;
 				width: 4rem;
-				// background-color: chartreuse;
+				margin: 0.2rem;
 				z-index: 1;
 			}
 		}
@@ -203,9 +220,8 @@ h6 {
 			/* justify-content: center; */
 			align-items: center;
 			img {
-				height: 320px;
-				max-width: 19rem;
-				min-width: 19rem;
+				max-height: 400px;
+				width: 26rem;
 				border-radius: 4%;
 			}
 			h1 {
@@ -214,19 +230,117 @@ h6 {
 				line-height: 16px;
 				color: darkgrey;
 				margin-top: 0.5rem;
-				width: 18rem;
+				width: 25rem;
 			}
 
 			h2 {
 				color: darkgrey;
 				font-size: 16px;
 				width: 100%;
-				width: 18rem;
+				width: 25rem;
 			}
 		}
 		.details_artist_top_tracks {
 			width: 23rem;
 			margin-top: -9rem;
 		}
+	}
+}
+
+@media only screen and (min-width: 1100px) {
+	.main_media_details_wrapper .sidebar_spotify_details_wrapper {
+		width: 54%;
+		min-width: 54%;
+	}
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_artist_title_wrapper {
+		margin-right: -35%;
+		margin-left: 3rem;
+	}
+
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_artists {
+		margin-left: 11%;
+	}
+
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_tracks {
+		margin-left: -22%;
+	}
+
+	.App {
+		height: 180vh;
+	}
+
+	.main_media_details_wrapper .spotify_wrapper .active {
+		height: fit-content;
+	}
+}
+
+@media only screen and (min-width: 1300px) {
+	.main_media_details_wrapper .sidebar_spotify_details_wrapper {
+		width: 47%;
+		min-width: 47%;
+	}
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_artist_title_wrapper {
+		margin-right: -41%;
+	}
+
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_artists {
+		margin-left: 17%;
+	}
+
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_tracks {
+		margin-left: -23%;
+	}
+}
+
+@media only screen and (min-width: 1600px) {
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_artist_title_wrapper {
+		margin-right: -37%;
+	}
+
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_artists {
+		margin-left: 17%;
+	}
+
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_tracks {
+		margin-left: -18%;
+	}
+}
+
+@media only screen and (min-width: 1800px) {
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_artist_title_wrapper {
+		margin-right: -34%;
+		margin-left: 5rem;
+	}
+
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_artists {
+		margin-left: 17%;
+	}
+
+	.main_media_details_wrapper
+		.sidebar_spotify_details_wrapper
+		.details_related_tracks {
+		margin-left: -16%;
 	}
 }

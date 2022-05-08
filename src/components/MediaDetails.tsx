@@ -22,11 +22,15 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	const [relatedArtistTracks, setRelatedArtistTracks] = useState<any>()
 	const [selectedTrack, setSelectedTrack] = useState<any>({
 		artistImg: null,
+		artistId: null,
 		artistName: null,
 		trackName: null,
 		track: null,
 	})
 	const [hover, setHover] = useState<boolean>(false)
+	const [showClass, setShowClass] = useState<boolean>(false)
+	const [disableTracks, setDisableTracks] = useState<boolean>(false)
+	const [isHidden, setIsHidden] = useState<boolean>(true)
 
 	const SpotifyApi = new Spotify()
 	useEffect(() => {
@@ -36,6 +40,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 
 	useEffect(() => {
 		getArtist()
+		// getArtistTopTracks()
 	}, [artist, hover])
 
 	console.log("Playlist:", playlist)
@@ -49,12 +54,32 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	console.log("Related Artists", relatedArtists)
 	console.log("Selected Track", selectedTrack)
 	console.log("Related Artist Tracks", relatedArtistTracks)
+
 	// console.log(details[0])
 	// console.log(details[0].title)
 
 	if (token) {
 		SpotifyApi.setAccessToken(token)
 	}
+
+	//Mouse over logic ---------------------------------------
+	const handleMouseOver = (e: React.MouseEvent<HTMLVideoElement>) => {
+		e.currentTarget.play()
+		setHover(true)
+	}
+	const handleMouseOut = (e: React.MouseEvent<HTMLVideoElement>) => {
+		e.currentTarget.pause()
+		setHover(false)
+	}
+	// hide tracks on click
+	const handleClick = () => {
+		setShowClass((showClass) => !showClass)
+	}
+	let toggleClassCheck = showClass ? "active" : "inactive"
+	const handleClickDisable = () => {
+		setDisableTracks((disableTracks) => !disableTracks)
+	}
+	let toggleClassDisable = showClass ? "disabled" : null
 
 	//Album pipe ---------------------------------------------------
 
@@ -105,16 +130,22 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 
 								<video
 									key={index}
-									onClick={() => {}}
+									onClick={() => {
+										setIsHidden(true)
+										getArtistTopTracks()
+										handleClickDisable()
+									}}
 									onMouseOver={(e) => {
 										handleMouseOver(e)
 										setArtist(data.artists[0].id)
 										getArtist()
 										setSelectedTrack({
 											artistName: data.artists[0].name,
+											artistId: data.artists[0].id,
 											trackName: data.name,
 											...setSelectedTrack,
 										})
+										setIsHidden(false)
 									}}
 									onMouseOut={handleMouseOut}
 									src={data.preview_url}
@@ -126,15 +157,6 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 				)
 			)
 		}
-	}
-
-	const handleMouseOver = (e: React.MouseEvent<HTMLVideoElement>) => {
-		e.currentTarget.play()
-		setHover(true)
-	}
-	const handleMouseOut = (e: React.MouseEvent<HTMLVideoElement>) => {
-		e.currentTarget.pause()
-		setHover(false)
 	}
 
 	// Playlist pipe ----------------------------------------------
@@ -178,14 +200,20 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 								</div>
 								<video
 									key={index}
-									onClick={() => {}}
+									onClick={() => {
+										setIsHidden(true)
+										getArtistTopTracks()
+										handleClickDisable()
+									}}
 									onMouseOver={(e) => {
 										setArtist(data.track.artists[0].id)
 										setSelectedTrack({
 											artistName: data.track.artists[0].name,
+											artistId: data.track.artists[0].id,
 											trackName: data.track.name,
 											...setSelectedTrack,
 										})
+										setIsHidden(false)
 										getArtist()
 										handleMouseOver(e)
 									}}
@@ -220,10 +248,6 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 					setArtistRecommendations(data)
 				})
 
-				SpotifyApi.getArtistTopTracks(artist, "US").then((data) => {
-					setArtistTopTracks(data)
-				})
-
 				const headers = {
 					"Accept": "application/json",
 					"Content-Type": "application/json",
@@ -255,6 +279,14 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 			})
 	}
 
+	const getArtistTopTracks = () => {
+		// if (selectedTrack.artistId !== undefined) {
+		SpotifyApi.getArtistTopTracks(selectedTrack.artistId, "US").then((data) => {
+			setArtistTopTracks(data)
+		})
+		// }
+	}
+
 	const getSelectedTrackInfo = () => {
 		return (
 			<div className="spotify_selectedtrack">
@@ -275,6 +307,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 								setSelectedTrack({
 									artistImg: data.images[1].url,
 									artistName: data.name,
+									artistId: data.id,
 									...setSelectedTrack,
 								})
 							}
@@ -293,11 +326,9 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 				return (
 					<video
 						key={index}
-						// onClick={() => {
-						// 	setArtist(data[0].tracks[0].id)
-						// 	getArtist()
-						// }}
-						// poster={data.artistImg}
+						onClick={() => {
+							getArtistTopTracks()
+						}}
 						onMouseOver={(e) => {
 							setSelectedTrack({
 								track: data.tracks[0].preview_url,
@@ -326,6 +357,13 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 								key={index}
 								poster={data.album.images[2].url}
 								onMouseOver={(e) => {
+									setSelectedTrack({
+										// track: data.tracks[0].preview_url,
+										...selectedTrack,
+										trackName: data.name,
+										artistName: data.artists[0].name,
+										artistImg: data.album.images[1].url,
+									})
 									handleMouseOver(e)
 								}}
 								onMouseOut={handleMouseOut}
@@ -366,10 +404,18 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 						</div>
 					</div>
 					<div className="spotify_wrapper">
-						<div className="main_spotify_track_wrapper">
-							{albumTracks === undefined
-								? showPlaylistTracks(playlistTracks)
-								: showAlbumTracks(albumTracks)}
+						<div
+							onClick={() => handleClick()}
+							className={`main_spotify_toggle ${toggleClassCheck}`}
+						>
+							<div
+								className={`main_spotify_track_wrapper ${toggleClassDisable}`}
+								onClick={() => handleClickDisable()}
+							>
+								{albumTracks === undefined
+									? showPlaylistTracks(playlistTracks)
+									: showAlbumTracks(albumTracks)}
+							</div>
 						</div>
 						<div className="sidebar_spotify_details_wrapper">
 							<div className="sidebar_spotify_details">
@@ -378,18 +424,18 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 								</div>
 
 								<div className="details_related_artist_title_wrapper">
-									<p>RELATED ARTISTS</p>
+									{isHidden === true ? <p>RELATED ARTISTS</p> : <></>}
 								</div>
 								<div className="details_related_artists">
-									{spotifyRelatedArtistsInfo()}
+									{isHidden === true ? spotifyRelatedArtistsInfo() : <></>}
 								</div>
 								<div className="details_related_tracks">
-									{spotifyRelatedArtistsTracks()}
+									{isHidden === true ? spotifyRelatedArtistsTracks() : <></>}
 								</div>
 							</div>
 
 							<div className="details_artist_top_tracks">
-								{spotifyArtistTopTracks()}
+								{isHidden === true ? spotifyArtistTopTracks() : <></>}
 							</div>
 						</div>
 					</div>
