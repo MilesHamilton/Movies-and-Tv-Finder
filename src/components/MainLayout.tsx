@@ -82,8 +82,8 @@ const MainLayout: React.FC<Props> = ({ details, upDetails, movie, tv }) => {
 	const carousalSettings = {
 		slidesToShow: 8,
 		slidesToScroll: 4,
-		dots: true,
-		autoplay: false,
+		dots: false,
+		autoplay: true,
 		pauseOnHover: true,
 		draggable: true,
 		autoplaySpeed: 5000,
@@ -121,7 +121,9 @@ const MainLayout: React.FC<Props> = ({ details, upDetails, movie, tv }) => {
 			<Divider plain />
 			<div className="tv-carousel">
 				<h1>Trending Movies</h1>
-				<Carousel {...carousalSettings}>{showMovies()}</Carousel>
+				<Carousel arrows={true} {...carousalSettings}>
+					{showMovies()}
+				</Carousel>
 			</div>
 			<div className="tv-carousel">
 				<h1>Trending Television</h1>

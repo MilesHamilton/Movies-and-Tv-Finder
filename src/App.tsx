@@ -13,7 +13,6 @@ const App = () => {
 	const [tv, setTv] = useState<any[]>([])
 	const [details, setDetails] = useState<any[]>([])
 	const [token, setToken] = useState<any>(null)
-	const [refresh, setRefresh] = useState<any>(null)
 
 	useEffect(() => {
 		const hash = ExtractToken()
@@ -22,32 +21,30 @@ const App = () => {
 		console.log(hash)
 		upDetails(details)
 		setToken(token)
-		setRefresh(refresh)
 		handleMovieData()
 		handleTvData()
 	}, [])
-	console.log(token)
-	console.log(refresh)
+
 	const upDetails = (details: any[]) => {
 		setDetails(details)
 	}
 
+	const handleMovieData = async () => {
+		let moviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&region=US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_year=2022&watch_region=US`
+		const res = await fetch(moviesUrl)
+		const data = await res.json()
+		setMovie(data.results)
+	}
 	const handleTvData = async () => {
-		let tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&timezone=America%2FNew_York&vote_average.gte=0&include_null_first_air_dates=false&page=1`
+		let tvUrl = `
+https://api.themoviedb.org/3/discover/tv?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&sort_by=popularity.desc&first_air_date_year=2022&page=1&timezone=America%2FNew_York&with_genres=Drama&watch_region=US`
 		const res = await fetch(tvUrl)
 		const data = await res.json()
 		// console.log(data)
 		setTv(data.results)
 	}
 
-	const handleMovieData = async () => {
-		let moviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&include_adult=false&include_video=false&vote_average.gte=0&page=1`
-		const res = await fetch(moviesUrl)
-		const data = await res.json()
-		setMovie(data.results)
-	}
-	//api.themoviedb.org/3/movie/now_playing?api_key=<<api_key>>&language=en-US&page=1
-	https: return (
+	return (
 		<div className="App">
 			{token ? (
 				<h1>Successfully logged it</h1>

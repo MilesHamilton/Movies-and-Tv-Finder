@@ -40,7 +40,6 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 
 	useEffect(() => {
 		getArtist()
-		// getArtistTopTracks()
 	}, [artist, hover])
 
 	console.log("Playlist:", playlist)
@@ -87,7 +86,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 		if (details[0].title !== undefined) {
 			return `${details[0].title} Original Motion Picture Soundtrack`
 		} else {
-			return `${details[0].original_name} Tv Series`
+			return `${details[0].original_name} Original Soundtrack`
 		}
 	}
 
@@ -311,7 +310,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 									...setSelectedTrack,
 								})
 							}
-							src={data.images[2].url}
+							src={data.images[2] === undefined ? "" : data.images[2].url}
 							className="related_artist_info"
 						></img>
 					)
@@ -435,6 +434,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 							</div>
 
 							<div className="details_artist_top_tracks">
+								{isHidden === true ? <p>ARTIST TOP TRACKS</p> : <></>}
 								{isHidden === true ? spotifyArtistTopTracks() : <></>}
 							</div>
 						</div>
