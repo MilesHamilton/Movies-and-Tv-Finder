@@ -7,7 +7,7 @@ interface Props {
 }
 
 const MediaDetails: React.FC<Props> = ({ token, details }) => {
-	const [album, setAlbum] = useState<SpotifyApi.AlbumSearchResponse>()
+	const [album, setAlbum] = useState<any>()
 	const [albumTracks, setAlbumTracks] = useState<SpotifyApi.AlbumObjectFull>()
 	const [playlist, setPlaylist] = useState<SpotifyApi.PlaylistSearchResponse>()
 	const [playlistTracks, setPlaylistTracks] =
@@ -31,6 +31,7 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	const [showClass, setShowClass] = useState<boolean>(false)
 	const [disableTracks, setDisableTracks] = useState<boolean>(false)
 	const [isHidden, setIsHidden] = useState<boolean>(true)
+	const [albumSort, setAlbumSort] = useState<any>()
 
 	const SpotifyApi = new Spotify()
 	useEffect(() => {
@@ -53,6 +54,8 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	console.log("Related Artists", relatedArtists)
 	console.log("Selected Track", selectedTrack)
 	console.log("Related Artist Tracks", relatedArtistTracks)
+	console.log("Album Sort", albumSort)
+	console.log()
 
 	// console.log(details[0])
 	// console.log(details[0].title)
@@ -86,25 +89,44 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 		if (details[0].title !== undefined) {
 			return `${details[0].title} Original Motion Picture Soundtrack`
 		} else {
-			return `${details[0].original_name} Original Soundtrack`
+			return `${details[0].original_name} soundtrack`
 		}
 	}
+
+	//Look into sorting the array directly
 
 	const getAlbum = () => {
 		if (details.length > 0) {
 			SpotifyApi.searchAlbums(filterSpotifyQuery())
 				.then((data) => {
+					return data.albums.items.filter((data: any) => {
+						return (
+							(data.total_tracks >= 10 && data.album_type === "album") ||
+							data.album_type === "compilation"
+						)
+					})
+				})
+				// .then((data: any) => {
+				// 	return data.name.match(details[0].title)
+				// })
+				.then((data: any) => {
+					return data.sort((a: any, b: any) => {
+						return a.release_date < b.relase_date
+							? 1
+							: a.release_date > b.release_date
+							? -1
+							: 0
+					})
+				})
+				.then((data) => {
 					setAlbum(data)
-					return data
-				})
-				.then((data) => {
-					return SpotifyApi.getAlbum(data.albums.items[0].id)
-				})
-				.then((data) => {
-					setAlbumTracks(data)
-				})
-				.catch((err) => {
-					console.log(err)
+					SpotifyApi.getAlbum(data[0].id)
+						.then((data) => {
+							setAlbumTracks(data)
+						})
+						.catch((err) => {
+							console.log(err)
+						})
 				})
 		}
 	}

@@ -1,23 +1,30 @@
 import React, { useEffect, useState, useContext } from "react"
-import { Carousel, Drawer, Divider } from "antd"
+import { Carousel, Divider } from "antd"
 import "../Sass/main_layout.scss"
 import { Routes, Route, Outlet, Link } from "react-router-dom"
 interface Props {
 	details: any[]
 	upDetails: any
-	movie: any
-	tv: any
+	trending: any
+	netflixOriginals: any
+	amazonOriginals: any
 }
-const MainLayout: React.FC<Props> = ({ details, upDetails, movie, tv }) => {
+const MainLayout: React.FC<Props> = ({
+	details,
+	upDetails,
+	trending,
+	netflixOriginals,
+	amazonOriginals,
+}) => {
 	// Creates movie cards
-	const showMovies = (): JSX.Element[] => {
+	const showTrending = (): JSX.Element[] => {
 		return (
-			movie &&
-			movie.map((mv: any) => {
+			trending &&
+			trending.map((mv: any) => {
 				return (
 					<Link
 						key={mv.id}
-						to={`/movie/${mv.title}`}
+						to={`/trending/${mv.title}`}
 						onClick={() => upDetails([mv])}
 					>
 						<div className="card-container">
@@ -33,10 +40,10 @@ const MainLayout: React.FC<Props> = ({ details, upDetails, movie, tv }) => {
 								/>
 							</div>
 
-							<h1 className="title">{mv.title}</h1>
+							{/* <h1 className="title">{mv.title}</h1>
 
 							<h2 className="vote_average">{mv.vote_average}/10</h2>
-							<p className="release_date">{mv.release_date}</p>
+							<p className="release_date">{mv.release_date}</p> */}
 						</div>
 					</Link>
 				)
@@ -45,31 +52,63 @@ const MainLayout: React.FC<Props> = ({ details, upDetails, movie, tv }) => {
 	}
 
 	//  creates TV cards
-	const showTv = (): JSX.Element[] => {
+	const showNetflixOriginals = (): JSX.Element[] => {
 		return (
-			tv &&
-			tv.map((tv: any) => {
+			netflixOriginals &&
+			netflixOriginals.map((data: any) => {
 				return (
 					<Link
-						key={tv.id}
-						to={`/tv/${tv.original_name}`}
-						onClick={() => upDetails([tv])}
+						key={data.id}
+						to={`/Netflix-originals/${data.original_name}`}
+						onClick={() => upDetails([data])}
 					>
 						<div className="card-container">
 							<div
 								className="img"
 								onClick={() => {
-									upDetails([tv])
+									upDetails([data])
 								}}
 							>
 								<img
-									src={"https://image.tmdb.org/t/p/w200/" + tv.poster_path}
-									alt={tv.poster_path}
+									src={"https://image.tmdb.org/t/p/w200/" + data.poster_path}
+									alt={data.poster_path}
 								/>
 							</div>
-							<h1 className="title">{tv.original_name}</h1>
+							{/* <h1 className="title">{tv.original_name}</h1>
 							<h2 className="vote_average">{tv.vote_average}/10</h2>
-							<p className="release_date">{tv.first_air_date}</p>
+							<p className="release_date">{tv.first_air_date}</p> */}
+						</div>
+					</Link>
+				)
+			})
+		)
+	}
+
+	const showAmazonOriginals = (): JSX.Element[] => {
+		return (
+			amazonOriginals &&
+			amazonOriginals.map((data: any) => {
+				return (
+					<Link
+						key={data.id}
+						to={`/Amazon-originals/${data.original_name}`}
+						onClick={() => upDetails([data])}
+					>
+						<div className="card-container">
+							<div
+								className="img"
+								onClick={() => {
+									upDetails([data])
+								}}
+							>
+								<img
+									src={"https://image.tmdb.org/t/p/w200/" + data.poster_path}
+									alt={data.poster_path}
+								/>
+							</div>
+							{/* <h1 className="title">{tv.original_name}</h1>
+							<h2 className="vote_average">{tv.vote_average}/10</h2>
+							<p className="release_date">{tv.first_air_date}</p> */}
 						</div>
 					</Link>
 				)
@@ -119,15 +158,19 @@ const MainLayout: React.FC<Props> = ({ details, upDetails, movie, tv }) => {
 	return (
 		<div className="Content">
 			<Divider plain />
-			<div className="tv-carousel">
-				<h1>Trending Movies</h1>
+			<div className="trending-carousel">
+				<h1>Trending</h1>
 				<Carousel arrows={true} {...carousalSettings}>
-					{showMovies()}
+					{showTrending()}
 				</Carousel>
 			</div>
-			<div className="tv-carousel">
-				<h1>Trending Television</h1>
-				<Carousel {...carousalSettings}>{showTv()}</Carousel>
+			<div className="netflix-carousel">
+				<h1>Netflix Originals</h1>
+				<Carousel {...carousalSettings}>{showNetflixOriginals()}</Carousel>
+			</div>
+			<div className="amazon-carousel">
+				<h1>Amazon Originals</h1>
+				<Carousel {...carousalSettings}>{showAmazonOriginals()}</Carousel>
 			</div>
 		</div>
 	)

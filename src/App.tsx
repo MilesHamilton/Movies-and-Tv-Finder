@@ -6,42 +6,51 @@ import { Layout } from "antd"
 import { ExtractToken } from "./components/Spotify"
 import { Routes, Route } from "react-router-dom"
 
-const { Header, Footer, Content } = Layout
+const { Header, Content } = Layout
 
 const App = () => {
-	const [movie, setMovie] = useState<any[]>([])
-	const [tv, setTv] = useState<any[]>([])
+	const [trending, setTrending] = useState<any[]>([])
+	const [netflixOriginals, setNetflixOriginals] = useState<any[]>([])
+	const [amazonOriginals, setAmazonOriginals] = useState<any[]>([])
 	const [details, setDetails] = useState<any[]>([])
 	const [token, setToken] = useState<any>(null)
 
 	useEffect(() => {
 		const hash = ExtractToken()
 		const token = hash.access_token
-		const refresh = hash.refresh_token
+		// const refresh = hash.refresh_tokens
 		console.log(hash)
 		upDetails(details)
 		setToken(token)
-		handleMovieData()
-		handleTvData()
+		handleTrending()
+		handleNetflixOriginals()
+		handleAmazonOriginals()
 	}, [])
+
+	console.log(details[0])
 
 	const upDetails = (details: any[]) => {
 		setDetails(details)
 	}
-
-	const handleMovieData = async () => {
-		let moviesUrl = `https://api.themoviedb.org/3/discover/movie?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&region=US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_year=2022&watch_region=US`
+	const API_KEY: string = "d99ca085dcabfdf79d02b94e61ac56c4"
+	const handleTrending = async () => {
+		let moviesUrl = `https://api.themoviedb.org/3/trending/all/week?api_key=${API_KEY}&language=en-US`
 		const res = await fetch(moviesUrl)
 		const data = await res.json()
-		setMovie(data.results)
+		setTrending(data.results)
 	}
-	const handleTvData = async () => {
-		let tvUrl = `
-https://api.themoviedb.org/3/discover/tv?api_key=d99ca085dcabfdf79d02b94e61ac56c4&language=en-US&sort_by=popularity.desc&first_air_date_year=2022&page=1&timezone=America%2FNew_York&with_genres=Drama&watch_region=US`
+	const handleNetflixOriginals = async () => {
+		let tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=213`
 		const res = await fetch(tvUrl)
 		const data = await res.json()
-		// console.log(data)
-		setTv(data.results)
+		setNetflixOriginals(data.results)
+	}
+
+	const handleAmazonOriginals = async () => {
+		let amazonOriginalsUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=1024`
+		const res = await fetch(amazonOriginalsUrl)
+		const data = await res.json()
+		setAmazonOriginals(data.results)
 	}
 
 	return (
@@ -63,17 +72,22 @@ https://api.themoviedb.org/3/discover/tv?api_key=d99ca085dcabfdf79d02b94e61ac56c
 								<MainLayout
 									details={details}
 									upDetails={upDetails}
-									tv={tv}
-									movie={movie}
+									trending={trending}
+									netflixOriginals={netflixOriginals}
+									amazonOriginals={amazonOriginals}
 								/>
 							}
 						/>
 						<Route
-							path="/movie/:movie"
+							path="/trending/:movie"
 							element={<MediaDetails token={token} details={details} />}
 						/>
 						<Route
-							path="/tv/:tv"
+							path="/netflix-originals/:tv"
+							element={<MediaDetails token={token} details={details} />}
+						/>
+						<Route
+							path="/amazon-originals/:tv"
 							element={<MediaDetails token={token} details={details} />}
 						/>
 					</Routes>
