@@ -5,6 +5,7 @@ import { Routes, Route, Outlet, Link } from "react-router-dom"
 interface Props {
 	details: any[]
 	upDetails: any
+	upNetwork: any
 	trending: any
 	netflixOriginals: any
 	amazonOriginals: any
@@ -12,6 +13,7 @@ interface Props {
 const MainLayout: React.FC<Props> = ({
 	details,
 	upDetails,
+	upNetwork,
 	trending,
 	netflixOriginals,
 	amazonOriginals,
@@ -25,13 +27,17 @@ const MainLayout: React.FC<Props> = ({
 					<Link
 						key={mv.id}
 						to={`/trending/${mv.title}`}
-						onClick={() => upDetails([mv])}
+						onClick={() => {
+							upDetails([mv])
+							upNetwork("trending")
+						}}
 					>
 						<div className="card-container">
 							<div
 								className="img"
 								onClick={() => {
 									upDetails([mv])
+									upNetwork("trending")
 								}}
 							>
 								<img
@@ -60,13 +66,17 @@ const MainLayout: React.FC<Props> = ({
 					<Link
 						key={data.id}
 						to={`/Netflix-originals/${data.original_name}`}
-						onClick={() => upDetails([data])}
+						onClick={() => {
+							upDetails([data])
+							upNetwork("netflix")
+						}}
 					>
 						<div className="card-container">
 							<div
 								className="img"
 								onClick={() => {
 									upDetails([data])
+									upNetwork("netflix")
 								}}
 							>
 								<img
@@ -92,13 +102,17 @@ const MainLayout: React.FC<Props> = ({
 					<Link
 						key={data.id}
 						to={`/Amazon-originals/${data.original_name}`}
-						onClick={() => upDetails([data])}
+						onClick={() => {
+							upDetails([data])
+							upNetwork("amazon")
+						}}
 					>
 						<div className="card-container">
 							<div
 								className="img"
 								onClick={() => {
 									upDetails([data])
+									upNetwork("amazon")
 								}}
 							>
 								<img

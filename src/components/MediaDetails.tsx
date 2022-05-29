@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useContext } from "react"
 import Spotify from "spotify-web-api-js"
 import "../Sass/media_details.scss"
+var stringSimilarity = require("string-similarity")
 interface Props {
 	details: any[]
 	token: string
+	network: string
 }
 
-const MediaDetails: React.FC<Props> = ({ token, details }) => {
+const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 	const [album, setAlbum] = useState<any>()
 	const [albumTracks, setAlbumTracks] = useState<SpotifyApi.AlbumObjectFull>()
 	const [playlist, setPlaylist] = useState<SpotifyApi.PlaylistSearchResponse>()
@@ -86,10 +88,14 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 	//Album pipe ---------------------------------------------------
 
 	const filterSpotifyQuery = () => {
-		if (details[0].title !== undefined) {
+		if (details[0].title !== undefined && network === "") {
 			return `${details[0].title} Original Motion Picture Soundtrack`
+		} else if (network === "netflix") {
+			return `${details[0].original_name} Netflix Series`
+		} else if (network === "amazon") {
+			return `${details[0].original_name} Amazon Original`
 		} else {
-			return `${details[0].original_name} soundtrack`
+			return `${details[0].original_name}`
 		}
 	}
 
@@ -106,9 +112,29 @@ const MediaDetails: React.FC<Props> = ({ token, details }) => {
 						)
 					})
 				})
-				// .then((data: any) => {
-				// 	return data.name.match(details[0].title)
-				// })
+				.then((data: any) => {
+					const matches = data.map((data: any) => {
+						return stringSimilarity.compareTwoStrings(
+							filterSpotifyQuery(),
+							data.name
+						)
+					})
+
+					console.log(filterSpotifyQuery())
+
+					let filtered: any = []
+
+					for (let i = 0; i < matches.length; i++) {
+						if (matches[i] >= 0.6) {
+							filtered.push(data[i])
+						}
+					}
+
+					console.log(filtered)
+					console.log(matches)
+					console.log(data)
+					return filtered
+				})
 				.then((data: any) => {
 					return data.sort((a: any, b: any) => {
 						return a.release_date < b.relase_date

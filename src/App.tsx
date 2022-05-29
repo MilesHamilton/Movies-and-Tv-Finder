@@ -14,6 +14,7 @@ const App = () => {
 	const [amazonOriginals, setAmazonOriginals] = useState<any[]>([])
 	const [details, setDetails] = useState<any[]>([])
 	const [token, setToken] = useState<any>(null)
+	const [network, setNetwork] = useState<any>("")
 
 	useEffect(() => {
 		const hash = ExtractToken()
@@ -28,9 +29,14 @@ const App = () => {
 	}, [])
 
 	console.log(details[0])
+	console.log("network:", network)
 
 	const upDetails = (details: any[]) => {
 		setDetails(details)
+	}
+
+	const upNetwork = (network: any) => {
+		setNetwork(network)
 	}
 	const API_KEY: string = "d99ca085dcabfdf79d02b94e61ac56c4"
 	const handleTrending = async () => {
@@ -40,14 +46,14 @@ const App = () => {
 		setTrending(data.results)
 	}
 	const handleNetflixOriginals = async () => {
-		let tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=213`
+		let tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=213&language=en-US`
 		const res = await fetch(tvUrl)
 		const data = await res.json()
 		setNetflixOriginals(data.results)
 	}
 
 	const handleAmazonOriginals = async () => {
-		let amazonOriginalsUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=1024`
+		let amazonOriginalsUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=1024&language=en-US`
 		const res = await fetch(amazonOriginalsUrl)
 		const data = await res.json()
 		setAmazonOriginals(data.results)
@@ -72,6 +78,7 @@ const App = () => {
 								<MainLayout
 									details={details}
 									upDetails={upDetails}
+									upNetwork={upNetwork}
 									trending={trending}
 									netflixOriginals={netflixOriginals}
 									amazonOriginals={amazonOriginals}
@@ -80,15 +87,33 @@ const App = () => {
 						/>
 						<Route
 							path="/trending/:movie"
-							element={<MediaDetails token={token} details={details} />}
+							element={
+								<MediaDetails
+									token={token}
+									details={details}
+									network={network}
+								/>
+							}
 						/>
 						<Route
 							path="/netflix-originals/:tv"
-							element={<MediaDetails token={token} details={details} />}
+							element={
+								<MediaDetails
+									token={token}
+									details={details}
+									network={network}
+								/>
+							}
 						/>
 						<Route
 							path="/amazon-originals/:tv"
-							element={<MediaDetails token={token} details={details} />}
+							element={
+								<MediaDetails
+									token={token}
+									details={details}
+									network={network}
+								/>
+							}
 						/>
 					</Routes>
 				</Content>
