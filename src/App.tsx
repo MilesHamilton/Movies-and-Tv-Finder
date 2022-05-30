@@ -12,6 +12,8 @@ const App = () => {
 	const [trending, setTrending] = useState<any[]>([])
 	const [netflixOriginals, setNetflixOriginals] = useState<any[]>([])
 	const [amazonOriginals, setAmazonOriginals] = useState<any[]>([])
+	const [disneyPlus, setDisneyPlus] = useState<any[]>([])
+	const [appleOriginals, setAppleOriginals] = useState<any[]>([])
 	const [details, setDetails] = useState<any[]>([])
 	const [token, setToken] = useState<any>(null)
 	const [network, setNetwork] = useState<any>("")
@@ -26,6 +28,8 @@ const App = () => {
 		handleTrending()
 		handleNetflixOriginals()
 		handleAmazonOriginals()
+		handleDisneyPlus()
+		handleAppleOriginals()
 	}, [])
 
 	console.log(details[0])
@@ -59,6 +63,20 @@ const App = () => {
 		setAmazonOriginals(data.results)
 	}
 
+	const handleDisneyPlus = async () => {
+		let disneyPlusUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=2739&language=en-US`
+		const res = await fetch(disneyPlusUrl)
+		const data = await res.json()
+		setDisneyPlus(data.results)
+	}
+
+	const handleAppleOriginals = async () => {
+		let appleOriginalsUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=2552&language=en-US`
+		const res = await fetch(appleOriginalsUrl)
+		const data = await res.json()
+		setAppleOriginals(data.results)
+	}
+
 	return (
 		<div className="App">
 			{token ? (
@@ -82,6 +100,8 @@ const App = () => {
 									trending={trending}
 									netflixOriginals={netflixOriginals}
 									amazonOriginals={amazonOriginals}
+									disneyPlus={disneyPlus}
+									appleOriginals={appleOriginals}
 								/>
 							}
 						/>
@@ -107,6 +127,26 @@ const App = () => {
 						/>
 						<Route
 							path="/amazon-originals/:tv"
+							element={
+								<MediaDetails
+									token={token}
+									details={details}
+									network={network}
+								/>
+							}
+						/>
+						<Route
+							path="/disney-plus/:tv"
+							element={
+								<MediaDetails
+									token={token}
+									details={details}
+									network={network}
+								/>
+							}
+						/>
+						<Route
+							path="/apple-originals/:tv"
 							element={
 								<MediaDetails
 									token={token}

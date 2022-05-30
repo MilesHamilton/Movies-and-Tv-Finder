@@ -9,6 +9,8 @@ interface Props {
 	trending: any
 	netflixOriginals: any
 	amazonOriginals: any
+	disneyPlus: any
+	appleOriginals: any
 }
 const MainLayout: React.FC<Props> = ({
 	details,
@@ -17,6 +19,8 @@ const MainLayout: React.FC<Props> = ({
 	trending,
 	netflixOriginals,
 	amazonOriginals,
+	disneyPlus,
+	appleOriginals,
 }) => {
 	// Creates movie cards
 	const showTrending = (): JSX.Element[] => {
@@ -45,11 +49,6 @@ const MainLayout: React.FC<Props> = ({
 									alt={mv.poster_path}
 								/>
 							</div>
-
-							{/* <h1 className="title">{mv.title}</h1>
-
-							<h2 className="vote_average">{mv.vote_average}/10</h2>
-							<p className="release_date">{mv.release_date}</p> */}
 						</div>
 					</Link>
 				)
@@ -84,9 +83,6 @@ const MainLayout: React.FC<Props> = ({
 									alt={data.poster_path}
 								/>
 							</div>
-							{/* <h1 className="title">{tv.original_name}</h1>
-							<h2 className="vote_average">{tv.vote_average}/10</h2>
-							<p className="release_date">{tv.first_air_date}</p> */}
 						</div>
 					</Link>
 				)
@@ -120,9 +116,71 @@ const MainLayout: React.FC<Props> = ({
 									alt={data.poster_path}
 								/>
 							</div>
-							{/* <h1 className="title">{tv.original_name}</h1>
-							<h2 className="vote_average">{tv.vote_average}/10</h2>
-							<p className="release_date">{tv.first_air_date}</p> */}
+						</div>
+					</Link>
+				)
+			})
+		)
+	}
+
+	const showDisneyPlus = (): JSX.Element[] => {
+		return (
+			disneyPlus &&
+			disneyPlus.map((data: any) => {
+				return (
+					<Link
+						key={data.id}
+						to={`/Disney-plus/${data.original_name}`}
+						onClick={() => {
+							upDetails([data])
+							upNetwork("disney")
+						}}
+					>
+						<div className="card-container">
+							<div
+								className="img"
+								onClick={() => {
+									upDetails([data])
+									upNetwork("disney")
+								}}
+							>
+								<img
+									src={"https://image.tmdb.org/t/p/w200/" + data.poster_path}
+									alt={data.poster_path}
+								/>
+							</div>
+						</div>
+					</Link>
+				)
+			})
+		)
+	}
+	const showAppleOriginals = (): JSX.Element[] => {
+		return (
+			appleOriginals &&
+			appleOriginals.map((data: any) => {
+				return (
+					<Link
+						key={data.id}
+						to={`/apple-originals/${data.original_name}`}
+						onClick={() => {
+							upDetails([data])
+							upNetwork("apple")
+						}}
+					>
+						<div className="card-container">
+							<div
+								className="img"
+								onClick={() => {
+									upDetails([data])
+									upNetwork("apple")
+								}}
+							>
+								<img
+									src={"https://image.tmdb.org/t/p/w200/" + data.poster_path}
+									alt={data.poster_path}
+								/>
+							</div>
 						</div>
 					</Link>
 				)
@@ -133,10 +191,10 @@ const MainLayout: React.FC<Props> = ({
 	// request pipe to get playlist id and individual tracks
 
 	const carousalSettings = {
-		slidesToShow: 8,
-		slidesToScroll: 4,
+		slidesToShow: 7,
+		slidesToScroll: 8,
 		dots: false,
-		autoplay: true,
+		autoplay: false,
 		pauseOnHover: true,
 		draggable: true,
 		autoplaySpeed: 5000,
@@ -180,11 +238,27 @@ const MainLayout: React.FC<Props> = ({
 			</div>
 			<div className="netflix-carousel">
 				<h1>Netflix Originals</h1>
-				<Carousel {...carousalSettings}>{showNetflixOriginals()}</Carousel>
+				<Carousel arrows={true} {...carousalSettings}>
+					{showNetflixOriginals()}
+				</Carousel>
 			</div>
 			<div className="amazon-carousel">
 				<h1>Amazon Originals</h1>
-				<Carousel {...carousalSettings}>{showAmazonOriginals()}</Carousel>
+				<Carousel arrows={true} {...carousalSettings}>
+					{showAmazonOriginals()}
+				</Carousel>
+			</div>
+			<div className="disney-carousel">
+				<h1>Disney Plus</h1>
+				<Carousel arrows={true} {...carousalSettings}>
+					{showDisneyPlus()}
+				</Carousel>
+			</div>
+			<div className="apple-carousel">
+				<h1>Apple Originals</h1>
+				<Carousel arrows={true} {...carousalSettings}>
+					{showAppleOriginals()}
+				</Carousel>
 			</div>
 		</div>
 	)

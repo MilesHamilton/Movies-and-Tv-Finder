@@ -88,14 +88,18 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 	//Album pipe ---------------------------------------------------
 
 	const filterSpotifyQuery = () => {
-		if (details[0].title !== undefined && network === "") {
+		if (details[0].title !== undefined && network === "trending") {
 			return `${details[0].title} Original Motion Picture Soundtrack`
 		} else if (network === "netflix") {
-			return `${details[0].original_name} Netflix Series`
+			return `${details[0].original_name} Netflix Original TV`
 		} else if (network === "amazon") {
 			return `${details[0].original_name} Amazon Original`
+		} else if (network === "disney") {
+			return `${details[0].original_name} Disney Original Soundtrack`
+		} else if (network === "apple") {
+			return `${details[0].original_name} Apple Original Soundtrack`
 		} else {
-			return `${details[0].original_name}`
+			return `${details[0].title}`
 		}
 	}
 
@@ -125,7 +129,7 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 					let filtered: any = []
 
 					for (let i = 0; i < matches.length; i++) {
-						if (matches[i] >= 0.6) {
+						if (matches[i] >= 0.5) {
 							filtered.push(data[i])
 						}
 					}
@@ -215,7 +219,45 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 					return data
 				})
 				.then((data) => {
-					return SpotifyApi.getPlaylist(data.playlists.items[0].id)
+					return data.playlists.items.filter((data: any) => {
+						return data.tracks.total >= 10
+					})
+				})
+				.then((data: any) => {
+					const matches = data.map((data: any) => {
+						return stringSimilarity.compareTwoStrings(
+							filterSpotifyQuery(),
+							data.name
+						)
+					})
+
+					console.log(filterSpotifyQuery())
+
+					let filtered: any = []
+
+					for (let i = 0; i < matches.length; i++) {
+						if (matches[i] >= 0.5) {
+							filtered.push(data[i])
+						}
+					}
+
+					console.log(filtered)
+					console.log(matches)
+					console.log(data)
+					return filtered
+				})
+				.then((data: any) => {
+					return data.sort((a: any, b: any) => {
+						return a.release_date < b.relase_date
+							? 1
+							: a.release_date > b.release_date
+							? -1
+							: 0
+					})
+				})
+
+				.then((data) => {
+					return SpotifyApi.getPlaylist(data[0].id)
 				})
 				.then((data) => {
 					setPlaylistTracks(data)

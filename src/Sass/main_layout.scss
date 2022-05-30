@@ -42,23 +42,43 @@ Header > h1 {
 	align-items: center;
 	justify-self: center;
 } */
-// .ant-carousel .slick-prev,
-// .ant-carousel .slick-prev:hover {
-// 	left: 10px;
-// 	z-index: 2;
-// 	color: white;
-// 	font-size: 20px;
-// 	height: 30px;
+.ant-carousel .slick-prev,
+.ant-carousel .slick-prev:hover {
+	left: 10px;
+	z-index: 2;
+
+	font-size: 20px;
+	height: 30px;
+}
+
+.ant-carousel .slick-next,
+.ant-carousel .slick-next:hover {
+	right: 10px;
+	z-index: 2;
+	font-size: 20px;
+	height: 100%;
+	/* display: flex; */
+	width: 5%;
+	background-position-y: center;
+	background-repeat: no-repeat;
+	background-image: url(./images/arrow_forward.svg);
+	fill: white;
+	top: 0%;
+	// background-color: black;
+	// opacity: 30%;
+}
+
+// .ant-carousel {
+// 	.slick-next:hover {
+// 		background-color: black;
+// 		opacity: 30%;
+// 		transition: 50ms;
+// 	}
 // }
 
-// .ant-carousel .slick-next,
-// .ant-carousel .slick-next:hover {
-// 	right: 10px;
-// 	z-index: 2;
-// 	color: white;
-// 	font-size: 20px;
-// 	height: 30px;
-// }
+.ant-carousel .slick-next::before {
+	content: "";
+}
 .title {
 	font-size: 14px;
 	font-weight: bold;
