@@ -12,6 +12,32 @@ html {
 	overflow-x: hidden;
 }
 
+.logo {
+	width: 30px;
+	height: 30px;
+	border-radius: 30px;
+	position: absolute;
+	background: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		from(#5cf037),
+		to(#fae62d)
+	);
+	background: linear-gradient(#5cf037, #fae62d);
+	background: linear-gradient(#5cf037, #fae62d);
+	-webkit-transition: box-shadow 1s;
+	transition: box-shadow 1s;
+	text-align: center;
+	color: #fff;
+	font-size: 15px;
+	line-height: 31px;
+	font-weight: 700;
+	z-index: 1001;
+	top: 36px;
+	left: 33px;
+}
+
 h1,
 h2,
 h3,

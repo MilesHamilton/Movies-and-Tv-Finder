@@ -230,31 +230,31 @@ const MainLayout: React.FC<Props> = ({
 	return (
 		<div className="Content">
 			<Divider plain />
-			<div className="trending-carousel">
+			<div className="carousel">
 				<h1>Trending</h1>
 				<Carousel arrows={true} {...carousalSettings}>
 					{showTrending()}
 				</Carousel>
 			</div>
-			<div className="netflix-carousel">
+			<div className="carousel">
 				<h1>Netflix Originals</h1>
 				<Carousel arrows={true} {...carousalSettings}>
 					{showNetflixOriginals()}
 				</Carousel>
 			</div>
-			<div className="amazon-carousel">
+			<div className="carousel">
 				<h1>Amazon Originals</h1>
 				<Carousel arrows={true} {...carousalSettings}>
 					{showAmazonOriginals()}
 				</Carousel>
 			</div>
-			<div className="disney-carousel">
+			<div className="carousel">
 				<h1>Disney Plus</h1>
 				<Carousel arrows={true} {...carousalSettings}>
 					{showDisneyPlus()}
 				</Carousel>
 			</div>
-			<div className="apple-carousel">
+			<div className="carousel">
 				<h1>Apple Originals</h1>
 				<Carousel arrows={true} {...carousalSettings}>
 					{showAppleOriginals()}

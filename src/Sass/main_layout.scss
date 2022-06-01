@@ -51,23 +51,54 @@ Header > h1 {
 	height: 30px;
 }
 
-.ant-carousel .slick-next,
-.ant-carousel .slick-next:hover {
-	right: 10px;
+.carousel:hover .ant-carousel .slick-next {
 	z-index: 2;
 	font-size: 20px;
 	height: 100%;
-	/* display: flex; */
 	width: 5%;
+	display: block;
 	background-position-y: center;
 	background-repeat: no-repeat;
+	background-position-x: right;
 	background-image: url(./images/arrow_forward.svg);
 	fill: white;
 	top: 0%;
-	// background-color: black;
-	// opacity: 30%;
+	background-color: rgba(0, 0, 0, 0.5);
+	background-size: 2rem;
+	margin-top: 0rem;
+	right: 7px;
 }
 
+.carousel:hover .ant-carousel .slick-prev {
+	z-index: 2;
+	font-size: 20px;
+	height: 100%;
+	width: 5%;
+	display: block;
+	background-position-y: center;
+	background-repeat: no-repeat;
+	background-image: url(./images/arrow_back.svg);
+	fill: white;
+	top: 0%;
+	background-color: rgba(0, 0, 0, 0.5);
+	background-size: 2rem;
+	margin-top: 0rem;
+}
+.ant-carousel {
+	.slick-next:hover {
+		background-size: 3rem !important;
+		transition: all 0.1s ease-in-out;
+	}
+
+	.slick-prev:hover {
+		background-size: 3rem !important;
+		transition: all 0.1s ease-in-out;
+	}
+}
+
+// .ant-carousel .slick-next {
+// 	display: none;
+// }
 // .ant-carousel {
 // 	.slick-next:hover {
 // 		background-color: black;

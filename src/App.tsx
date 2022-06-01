@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
-import { loginUrl } from "./components/Spotify"
+import "./Sass/App.scss"
+import Landing from "./components/Landing"
 import MainLayout from "./components/MainLayout"
 import MediaDetails from "./components/MediaDetails"
 import { Layout } from "antd"
@@ -30,7 +31,14 @@ const App = () => {
 		handleAmazonOriginals()
 		handleDisneyPlus()
 		handleAppleOriginals()
+		refreshToken()
 	}, [])
+
+	const refreshToken = () => {
+		setTimeout(() => {
+			setToken("")
+		}, 1000 * 60 * 60)
+	}
 
 	console.log(details[0])
 	console.log("network:", network)
@@ -80,84 +88,85 @@ const App = () => {
 	return (
 		<div className="App">
 			{token ? (
-				<h1>Successfully logged it</h1>
+				<Layout>
+					<div className="header">
+						<div className="logo"></div>
+						<h1 className="pageTitle">Flixter</h1>
+					</div>
+
+					<Content>
+						<Routes>
+							<Route
+								path="/"
+								element={
+									<MainLayout
+										details={details}
+										upDetails={upDetails}
+										upNetwork={upNetwork}
+										trending={trending}
+										netflixOriginals={netflixOriginals}
+										amazonOriginals={amazonOriginals}
+										disneyPlus={disneyPlus}
+										appleOriginals={appleOriginals}
+									/>
+								}
+							/>
+							<Route
+								path="/trending/:movie"
+								element={
+									<MediaDetails
+										token={token}
+										details={details}
+										network={network}
+									/>
+								}
+							/>
+							<Route
+								path="/netflix-originals/:tv"
+								element={
+									<MediaDetails
+										token={token}
+										details={details}
+										network={network}
+									/>
+								}
+							/>
+							<Route
+								path="/amazon-originals/:tv"
+								element={
+									<MediaDetails
+										token={token}
+										details={details}
+										network={network}
+									/>
+								}
+							/>
+							<Route
+								path="/disney-plus/:tv"
+								element={
+									<MediaDetails
+										token={token}
+										details={details}
+										network={network}
+									/>
+								}
+							/>
+							<Route
+								path="/apple-originals/:tv"
+								element={
+									<MediaDetails
+										token={token}
+										details={details}
+										network={network}
+									/>
+								}
+							/>
+						</Routes>
+					</Content>
+				</Layout>
 			) : (
-				<a href={loginUrl}>LOG IN WITH SPOTIFY</a>
+				<Landing />
 			)}
-			<Layout>
-				<Header>
-					<h1>Movie and Tv Finder</h1>
-				</Header>
-				<Content>
-					<Routes>
-						<Route
-							path="/"
-							element={
-								<MainLayout
-									details={details}
-									upDetails={upDetails}
-									upNetwork={upNetwork}
-									trending={trending}
-									netflixOriginals={netflixOriginals}
-									amazonOriginals={amazonOriginals}
-									disneyPlus={disneyPlus}
-									appleOriginals={appleOriginals}
-								/>
-							}
-						/>
-						<Route
-							path="/trending/:movie"
-							element={
-								<MediaDetails
-									token={token}
-									details={details}
-									network={network}
-								/>
-							}
-						/>
-						<Route
-							path="/netflix-originals/:tv"
-							element={
-								<MediaDetails
-									token={token}
-									details={details}
-									network={network}
-								/>
-							}
-						/>
-						<Route
-							path="/amazon-originals/:tv"
-							element={
-								<MediaDetails
-									token={token}
-									details={details}
-									network={network}
-								/>
-							}
-						/>
-						<Route
-							path="/disney-plus/:tv"
-							element={
-								<MediaDetails
-									token={token}
-									details={details}
-									network={network}
-								/>
-							}
-						/>
-						<Route
-							path="/apple-originals/:tv"
-							element={
-								<MediaDetails
-									token={token}
-									details={details}
-									network={network}
-								/>
-							}
-						/>
-					</Routes>
-				</Content>
-			</Layout>
 		</div>
 	)
 }

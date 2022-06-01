@@ -1,0 +1,132 @@
+body {
+	font-family: Circular, arial;
+	font-size: 16px;
+	line-height: 1.2em;
+	color: #333;
+	font-weight: 400;
+}
+
+.opening-screen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: scroll;
+	background: #fff;
+}
+
+.logo-opening-screen {
+	width: 30px;
+	height: 30px;
+	border-radius: 30px;
+	position: absolute;
+	background: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		from(#f037a5),
+		to(#fae62d)
+	);
+	background: linear-gradient(#5cf037, #fae62d);
+	background: linear-gradient(#5cf037, #fae62d);
+	-webkit-transition: box-shadow 1s;
+	transition: box-shadow 1s;
+	text-align: center;
+	color: #fff;
+	font-size: 15px;
+	line-height: 31px;
+	font-weight: 700;
+	z-index: 1001;
+	top: 36px;
+	left: 33px;
+}
+
+.opening-screen-body {
+	width: 300px;
+	padding: 76px 36px 20px;
+	margin: 0;
+	background: #fff;
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		line-height: 1em;
+		margin: 0 0 0.6em;
+		font-weight: 700;
+		color: black;
+	}
+
+	h1 {
+		font-size: 24px;
+	}
+
+	p {
+		color: black;
+	}
+
+	button {
+		background-color: #5cf037;
+		color: #fff;
+		font-size: 13px;
+		font-weight: 700;
+		border-radius: 32px;
+		margin: 16px 0;
+		padding: 8px 36px;
+		text-align: center;
+		text-transform: uppercase;
+		cursor: pointer;
+		box-shadow: none;
+		border: none;
+
+		a {
+			color: white;
+		}
+	}
+
+	.info {
+		color: #777;
+		font-size: 13px;
+	}
+}
+
+.video-box video {
+	display: block;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+}
+
+@media (min-width: 1050px) {
+	.video-box {
+		width: calc(100vw - 580px);
+		max-width: 1000px;
+		display: block;
+		position: absolute;
+		left: 470px;
+		top: 200px;
+		box-shadow: 5px 18px 20px 6px rgba(0, 0, 0, 0.15);
+		border-bottom-left-radius: 3px;
+		border-bottom-right-radius: 3px;
+		margin: 0;
+	}
+}
+
+@media (min-width: 600px) {
+	.logo-opening-screen {
+		position: absolute;
+		top: 133px;
+		left: 70px;
+	}
+
+	.opening-screen-body {
+		margin: 100px 80px 20px;
+		padding: 36px;
+	}
+
+	.video-box {
+		margin: 20px 70px;
+	}
+}

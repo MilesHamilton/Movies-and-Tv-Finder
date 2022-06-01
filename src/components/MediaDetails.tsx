@@ -99,7 +99,7 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 		} else if (network === "apple") {
 			return `${details[0].original_name} Apple Original Soundtrack`
 		} else {
-			return `${details[0].title}`
+			return `${details[0].original_name}`
 		}
 	}
 
