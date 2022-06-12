@@ -50,50 +50,52 @@ const App = () => {
 	const upNetwork = (network: any) => {
 		setNetwork(network)
 	}
+
 	const API_KEY: string = "d99ca085dcabfdf79d02b94e61ac56c4"
 	const handleTrending = async () => {
 		let moviesUrl = `https://api.themoviedb.org/3/trending/all/week?api_key=${API_KEY}&language=en-US`
 		const res = await fetch(moviesUrl)
 		const data = await res.json()
-		setTrending(data.results)
+		const shuffle = data.results.sort(() => Math.random() - 0.5)
+		setTrending(shuffle)
 	}
+
 	const handleNetflixOriginals = async () => {
-		let tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=213&language=en-US`
+		let tvUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=213&language=en-US&with_origin_country=US`
 		const res = await fetch(tvUrl)
 		const data = await res.json()
-		setNetflixOriginals(data.results)
+		const shuffle = data.results.sort(() => Math.random() - 0.5)
+		setNetflixOriginals(shuffle)
 	}
 
 	const handleAmazonOriginals = async () => {
-		let amazonOriginalsUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=1024&language=en-US`
+		let amazonOriginalsUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=1024&language=en-US&with_origin_country=US`
 		const res = await fetch(amazonOriginalsUrl)
 		const data = await res.json()
-		setAmazonOriginals(data.results)
+		const shuffle = data.results.sort(() => Math.random() - 0.5)
+		setAmazonOriginals(shuffle)
 	}
 
 	const handleDisneyPlus = async () => {
-		let disneyPlusUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=2739&language=en-US`
+		let disneyPlusUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=2739&language=en-US&with_origin_country=US`
 		const res = await fetch(disneyPlusUrl)
 		const data = await res.json()
-		setDisneyPlus(data.results)
+		const shuffle = data.results.sort(() => Math.random() - 0.5)
+		setDisneyPlus(shuffle)
 	}
 
 	const handleAppleOriginals = async () => {
-		let appleOriginalsUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=2552&language=en-US`
+		let appleOriginalsUrl = `https://api.themoviedb.org/3/discover/tv?api_key=${API_KEY}&with_networks=2552&language=en-US&with_origin_country=US`
 		const res = await fetch(appleOriginalsUrl)
 		const data = await res.json()
-		setAppleOriginals(data.results)
+		const shuffle = data.results.sort(() => Math.random() - 0.5)
+		setAppleOriginals(shuffle)
 	}
 
 	return (
 		<div className="App">
 			{token ? (
 				<Layout>
-					<div className="header">
-						<div className="logo"></div>
-						<h1 className="pageTitle">Flixter</h1>
-					</div>
-
 					<Content>
 						<Routes>
 							<Route

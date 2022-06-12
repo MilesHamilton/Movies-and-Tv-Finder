@@ -57,10 +57,8 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 	console.log("Selected Track", selectedTrack)
 	console.log("Related Artist Tracks", relatedArtistTracks)
 	console.log("Album Sort", albumSort)
-	console.log()
 
-	// console.log(details[0])
-	// console.log(details[0].title)
+	console.log(details[0].title)
 
 	if (token) {
 		SpotifyApi.setAccessToken(token)
@@ -91,13 +89,13 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 		if (details[0].title !== undefined && network === "trending") {
 			return `${details[0].title} Original Motion Picture Soundtrack`
 		} else if (network === "netflix") {
-			return `${details[0].original_name} Netflix Original TV`
+			return `${details[0].original_name} Netflix Soundtrack`
 		} else if (network === "amazon") {
-			return `${details[0].original_name} Amazon Original`
+			return `${details[0].original_name} Amazon Soundtrack`
 		} else if (network === "disney") {
-			return `${details[0].original_name} Disney Original Soundtrack`
+			return `${details[0].original_name} Disney+ Soundtrack`
 		} else if (network === "apple") {
-			return `${details[0].original_name} Apple Original Soundtrack`
+			return `${details[0].original_name} Apple TV+ Soundtrack`
 		} else {
 			return `${details[0].original_name}`
 		}
@@ -248,7 +246,7 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 				})
 				.then((data: any) => {
 					return data.sort((a: any, b: any) => {
-						return a.release_date < b.relase_date
+						return a.release_date < b.release_date
 							? 1
 							: a.release_date > b.release_date
 							? -1
@@ -480,15 +478,18 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 						</div>
 						<div className="main_TMDB_info_details">
 							<h1 className="details_title">{details[0].title}</h1>
-							<h2 className="details_vote_average">
-								{details[0].vote_average}/10
-							</h2>
+							<h2 className="details_vote_average"></h2>
+							<b>Rating:</b> {details[0].vote_average}
 							<p className="details_release_date">
-								Release Date: {details[0].release_date}
+								<b>Release Date:</b>
+								<br />
+								{details[0].release_date}
 							</p>
 							<p className="details_overview">
 								<b>Overview:</b>
-								<br></br> {details[0].overview}
+								<br />
+
+								{details[0].overview}
 							</p>
 						</div>
 					</div>

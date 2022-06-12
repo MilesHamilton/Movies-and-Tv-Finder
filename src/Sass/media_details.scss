@@ -12,32 +12,6 @@ html {
 	overflow-x: hidden;
 }
 
-.logo {
-	width: 30px;
-	height: 30px;
-	border-radius: 30px;
-	position: absolute;
-	background: -webkit-gradient(
-		linear,
-		left top,
-		left bottom,
-		from(#5cf037),
-		to(#fae62d)
-	);
-	background: linear-gradient(#5cf037, #fae62d);
-	background: linear-gradient(#5cf037, #fae62d);
-	-webkit-transition: box-shadow 1s;
-	transition: box-shadow 1s;
-	text-align: center;
-	color: #fff;
-	font-size: 15px;
-	line-height: 31px;
-	font-weight: 700;
-	z-index: 1001;
-	top: 36px;
-	left: 33px;
-}
-
 h1,
 h2,
 h3,
@@ -48,9 +22,9 @@ h6 {
 }
 
 .ant-layout {
-	background-color: rgb(18, 18, 18);
+	background-image: linear-gradient(#3f3d58, #060140);
 	display: flex;
-	height: 100%;
+	height: 117vw;
 	margin: 0px;
 	-webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
 }
@@ -66,8 +40,37 @@ h6 {
 		flex-direction: row;
 
 		.main_TMDB_info_details {
+			display: flex;
+			margin-left: 1rem;
+			flex-direction: column;
+
+			.details_title {
+				font-weight: bolder;
+				font-size: xxx-large;
+				margin-top: 1rem;
+			}
 			.details_overview {
 				font-weight: 100;
+				width: 74%;
+
+				b {
+					font-weight: bold;
+				}
+			}
+
+			.details_vote_average {
+				font-size: medium;
+				font-weight: 100;
+
+				b {
+					font-weight: bold;
+				}
+			}
+
+			.details_release_date {
+				b {
+					font-weight: bold;
+				}
 			}
 		}
 	}
@@ -221,7 +224,7 @@ h6 {
 				border-radius: 50%;
 				height: 4rem;
 				width: 4rem;
-				margin: 0.2rem;
+				margin: 0.5rem;
 				z-index: 1;
 			}
 		}
@@ -235,7 +238,7 @@ h6 {
 			.related_artists_player {
 				height: 4rem;
 				width: 4rem;
-				margin: 0.2rem;
+				margin: 0.5rem;
 				z-index: 1;
 			}
 		}
@@ -268,8 +271,8 @@ h6 {
 		}
 		.details_artist_top_tracks {
 			width: 23rem;
-			margin-top: -15rem;
-			// padding-left: 3rem;
+			position: absolute;
+			top: 50rem;
 			p {
 				margin-bottom: 0;
 				font-weight: 100;
@@ -304,10 +307,6 @@ h6 {
 		.sidebar_spotify_details_wrapper
 		.details_related_tracks {
 		margin-left: -22%;
-	}
-
-	.App {
-		height: 180vh;
 	}
 
 	.main_media_details_wrapper .spotify_wrapper .active {

@@ -229,6 +229,10 @@ const MainLayout: React.FC<Props> = ({
 
 	return (
 		<div className="Content">
+			<div className="header">
+				<div className="logo"></div>
+				<h1 className="pageTitle">Flixter</h1>
+			</div>
 			<Divider plain />
 			<div className="carousel">
 				<h1>Trending</h1>
