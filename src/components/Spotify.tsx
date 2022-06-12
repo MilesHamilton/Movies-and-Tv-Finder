@@ -1,5 +1,5 @@
 export const authEndPoint = "https://accounts.spotify.com/authorize"
-const redirectUri = "http://localhost:3000/"
+const redirectUri = "https://flixter.app"
 const clientId = "ebdf37b5ee9344768dab19cc34e33ab8"
 const scopes = [
 	"user-read-currently-playing",
