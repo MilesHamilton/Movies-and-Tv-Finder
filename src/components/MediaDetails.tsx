@@ -33,7 +33,6 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 	const [showClass, setShowClass] = useState<boolean>(false)
 	const [disableTracks, setDisableTracks] = useState<boolean>(false)
 	const [isHidden, setIsHidden] = useState<boolean>(true)
-	const [albumSort, setAlbumSort] = useState<any>()
 
 	const SpotifyApi = new Spotify()
 	useEffect(() => {
@@ -45,20 +44,20 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 		getArtist()
 	}, [artist, hover])
 
-	console.log("Playlist:", playlist)
-	console.log("Playlist Tracks:", playlistTracks)
-	console.log("Album:", album)
-	console.log("Album tracks:", albumTracks)
-	console.log("Artist:", artist)
-	console.log("Artist info:", artistInfo)
-	console.log("Artist Recommendations:", artistRecommendations)
-	console.log("Artist Top Tracks", artistTopTracks)
-	console.log("Related Artists", relatedArtists)
-	console.log("Selected Track", selectedTrack)
-	console.log("Related Artist Tracks", relatedArtistTracks)
-	console.log("Album Sort", albumSort)
+	// console.log("Playlist:", playlist)
+	// console.log("Playlist Tracks:", playlistTracks)
+	// console.log("Album:", album)
+	// console.log("Album tracks:", albumTracks)
+	// console.log("Artist:", artist)
+	// console.log("Artist info:", artistInfo)
+	// console.log("Artist Recommendations:", artistRecommendations)
+	// console.log("Artist Top Tracks", artistTopTracks)
+	// console.log("Related Artists", relatedArtists)
+	// console.log("Selected Track", selectedTrack)
+	// console.log("Related Artist Tracks", relatedArtistTracks)
+	// console.log("Album Sort", albumSort)
 
-	console.log(details[0].title)
+	// console.log(details[0].title)
 
 	if (token) {
 		SpotifyApi.setAccessToken(token)
@@ -122,7 +121,7 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 						)
 					})
 
-					console.log(filterSpotifyQuery())
+					// console.log(filterSpotifyQuery())
 
 					let filtered: any = []
 
@@ -132,9 +131,9 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 						}
 					}
 
-					console.log(filtered)
-					console.log(matches)
-					console.log(data)
+					// console.log(filtered)
+					// console.log(matches)
+					// console.log(data)
 					return filtered
 				})
 				.then((data: any) => {
@@ -229,7 +228,7 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 						)
 					})
 
-					console.log(filterSpotifyQuery())
+					// console.log(filterSpotifyQuery())
 
 					let filtered: any = []
 
@@ -239,9 +238,9 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 						}
 					}
 
-					console.log(filtered)
-					console.log(matches)
-					console.log(data)
+					// console.log(filtered)
+					// console.log(matches)
+					// console.log(data)
 					return filtered
 				})
 				.then((data: any) => {
@@ -477,7 +476,9 @@ const MediaDetails: React.FC<Props> = ({ token, details, network }) => {
 							/>
 						</div>
 						<div className="main_TMDB_info_details">
-							<h1 className="details_title">{details[0].title}</h1>
+							<h1 className="details_title">
+								{details[0].title ? undefined : details[0].original_name}
+							</h1>
 							<h2 className="details_vote_average"></h2>
 							<b>Rating:</b> {details[0].vote_average}
 							<p className="details_release_date">

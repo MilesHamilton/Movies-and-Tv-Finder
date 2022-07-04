@@ -6,6 +6,10 @@ body {
 	font-weight: 400;
 }
 
+.App {
+	height: 100%;
+}
+
 .opening-screen {
 	position: absolute;
 	top: 0;
@@ -67,22 +71,40 @@ body {
 	p {
 		color: black;
 	}
+	.login {
+		button {
+			background-color: #5cf037;
+			color: #fff;
+			font-size: 13px;
+			font-weight: 700;
+			border-radius: 32px;
+			margin: 16px 0;
+			padding: 8px 36px;
+			text-align: center;
+			text-transform: uppercase;
+			cursor: pointer;
+			box-shadow: none;
+			border: none;
 
-	button {
-		background-color: #5cf037;
-		color: #fff;
-		font-size: 13px;
-		font-weight: 700;
-		border-radius: 32px;
-		margin: 16px 0;
-		padding: 8px 36px;
-		text-align: center;
-		text-transform: uppercase;
-		cursor: pointer;
-		box-shadow: none;
-		border: none;
+			a {
+				color: white;
+			}
+		}
+	}
 
-		a {
+	.about {
+		.ant-btn-primary {
+			color: black;
+			border-color: none;
+			background: none;
+			text-shadow: none;
+			border: none;
+			box-shadow: none;
+		}
+
+		.ant-btn-primary:hover {
+			border-color: #40a9ff;
+			background: #40a9ff;
 			color: white;
 		}
 	}

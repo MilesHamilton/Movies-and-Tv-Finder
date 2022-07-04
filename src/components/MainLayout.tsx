@@ -6,6 +6,7 @@ interface Props {
 	details: any[]
 	upDetails: any
 	upNetwork: any
+	upToken: any
 	trending: any
 	netflixOriginals: any
 	amazonOriginals: any
@@ -16,6 +17,7 @@ const MainLayout: React.FC<Props> = ({
 	details,
 	upDetails,
 	upNetwork,
+	upToken,
 	trending,
 	netflixOriginals,
 	amazonOriginals,
@@ -232,6 +234,12 @@ const MainLayout: React.FC<Props> = ({
 			<div className="header">
 				<div className="logo"></div>
 				<h1 className="pageTitle">Flixter</h1>
+			</div>
+			<div className="logout">
+				<button onClick={() => upToken()}>
+					{/* <a href={() => upToken}>Log out</a> */}
+					Log out
+				</button>
 			</div>
 			<Divider plain />
 			<div className="carousel">

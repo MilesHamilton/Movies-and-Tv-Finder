@@ -6,6 +6,12 @@ import MediaDetails from "./components/MediaDetails"
 import { Layout } from "antd"
 import { ExtractToken } from "./components/Spotify"
 import { Routes, Route } from "react-router-dom"
+import {
+	BrowserView,
+	MobileView,
+	isBrowser,
+	isMobile,
+} from "react-device-detect"
 
 const { Header, Content } = Layout
 
@@ -23,7 +29,7 @@ const App = () => {
 		const hash = ExtractToken()
 		const token = hash.access_token
 		// const refresh = hash.refresh_tokens
-		console.log(hash)
+		// console.log(hash)
 		upDetails(details)
 		setToken(token)
 		handleTrending()
@@ -40,8 +46,8 @@ const App = () => {
 		}, 1000 * 60 * 60)
 	}
 
-	console.log(details[0])
-	console.log("network:", network)
+	// console.log(details[0])
+	// console.log("network:", network)
 
 	const upDetails = (details: any[]) => {
 		setDetails(details)
@@ -49,6 +55,10 @@ const App = () => {
 
 	const upNetwork = (network: any) => {
 		setNetwork(network)
+	}
+
+	const upToken = () => {
+		setToken("")
 	}
 
 	const API_KEY: string = "d99ca085dcabfdf79d02b94e61ac56c4"
@@ -103,6 +113,7 @@ const App = () => {
 								element={
 									<MainLayout
 										details={details}
+										upToken={upToken}
 										upDetails={upDetails}
 										upNetwork={upNetwork}
 										trending={trending}
