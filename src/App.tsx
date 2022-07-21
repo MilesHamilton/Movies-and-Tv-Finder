@@ -3,15 +3,18 @@ import "./Sass/App.scss"
 import Landing from "./components/Landing"
 import MainLayout from "./components/MainLayout"
 import MediaDetails from "./components/MediaDetails"
+import MobileMessage from "./components/MobileMessage"
 import { Layout } from "antd"
 import { ExtractToken } from "./components/Spotify"
-import { Routes, Route } from "react-router-dom"
+import { Routes, Route, useLocation } from "react-router-dom"
+import { useLayoutEffect } from "react"
 import {
 	BrowserView,
 	MobileView,
 	isBrowser,
 	isMobile,
 } from "react-device-detect"
+import ScrollToTop from "./components/ScrollToTop"
 
 const { Header, Content } = Layout
 
@@ -28,8 +31,10 @@ const App = () => {
 	useEffect(() => {
 		const hash = ExtractToken()
 		const token = hash.access_token
+		removeLocationHash()
 		// const refresh = hash.refresh_tokens
 		// console.log(hash)
+
 		upDetails(details)
 		setToken(token)
 		handleTrending()
@@ -39,6 +44,11 @@ const App = () => {
 		handleAppleOriginals()
 		refreshToken()
 	}, [])
+
+	function removeLocationHash() {
+		let noHashURL = window.location.href.replace(/#.*$/, "")
+		window.history.replaceState("", document.title, noHashURL)
+	}
 
 	const refreshToken = () => {
 		setTimeout(() => {
@@ -107,6 +117,7 @@ const App = () => {
 			{token ? (
 				<Layout>
 					<Content>
+						<ScrollToTop />
 						<Routes>
 							<Route
 								path="/"

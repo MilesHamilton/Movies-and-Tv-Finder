@@ -15,7 +15,7 @@ body {
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100%;
+	height: 100vh;
 	overflow: scroll;
 	background: #fff;
 }
@@ -133,6 +133,10 @@ body {
 		border-bottom-left-radius: 3px;
 		border-bottom-right-radius: 3px;
 		margin: 0;
+
+		video {
+			width: calc(100vw - 580px);
+		}
 	}
 }
 
@@ -150,5 +154,55 @@ body {
 
 	.video-box {
 		margin: 20px 70px;
+	}
+}
+
+@media (max-width: 1000px) {
+	.video-box {
+		width: calc(59vw - -6rem);
+		max-width: 1000px;
+		display: block;
+		position: absolute;
+		left: 36px;
+		top: 247px;
+		box-shadow: 5px 18px 20px 6px rgba(0, 0, 0, 0.15);
+		border-bottom-left-radius: 3px;
+		border-bottom-right-radius: 3px;
+		margin: 0;
+		height: 13rem;
+	}
+
+	.logo-opening-screen {
+		position: absolute;
+		top: 40px;
+		left: 39px;
+	}
+	.opening-screen-body {
+		margin: 45px 4px 20px;
+		padding: 36px;
+	}
+
+	.landing-footer {
+		color: black;
+		position: absolute;
+		top: 31rem;
+		margin: 0 2.5rem;
+
+		p {
+			font-family: circular, arial;
+			font-size: medium;
+			font-weight: 500;
+		}
+
+		a {
+			color: #5cf037;
+			text-decoration: underline;
+		}
+
+		.copy-link {
+			border: #5cf037 1px solid;
+			cursor: text;
+			padding-left: 0.5rem;
+		}
 	}
 }
